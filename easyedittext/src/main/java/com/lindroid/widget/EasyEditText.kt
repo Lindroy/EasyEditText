@@ -1,5 +1,6 @@
 package com.lindroid.widget
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.support.v4.content.ContextCompat
@@ -83,23 +84,31 @@ class EasyEditText : AppCompatEditText {
 
     private var textListener: ((s: CharSequence) -> Unit)? = null
 
+    private var maxListener: (() -> Unit)? = null
+
     constructor(context: Context?) : this(context, null)
     //默认style为R.attr.editTextStyle才能获取焦点
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, android.R.attr.editTextStyle)
 
+    @SuppressLint("Recycle")
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         val typedArray = context?.obtainStyledAttributes(attrs, R.styleable.EasyEditText, defStyleAttr, 0)
         typedArray?.let {
-            //            toastMaxStr = it.getString(R.styleable.CustomEditText_toastMaxStr) ?: ""
-//            maxInputLength = it.getInt(R.styleable.CustomEditText_maxInputLength, maxInputLength)
-//            minInputLength = it.getInt(R.styleable.CustomEditText_minInputLength, minInputLength)
-//            isShowClear = it.getBoolean(R.styleable.CustomEditText_showClearBtn, isShowClear)
-//            isShowPwdBtn = it.getBoolean(R.styleable.CustomEditText_showClearBtn, isShowPwdBtn)
+            maxToastText = it.getString(R.styleable.EasyEditText_maxToastText) ?: ""
+            maxInputLength = it.getInt(R.styleable.EasyEditText_maxInputLength, maxInputLength)
+            minInputLength = it.getInt(R.styleable.EasyEditText_minInputLength, minInputLength)
+            isShowClearButton = it.getBoolean(R.styleable.EasyEditText_minInputLength, isShowClearButton)
+            isShowPwdButton = it.getBoolean(R.styleable.EasyEditText_showPwdBtn, isShowPwdButton)
             it.recycle()
         }
 
-//        init()
+        init()
+    }
 
+    private fun init() {
+        if (maxInputLength > 0 || minInputLength > 0 || isShowClearButton) {
+            setTextWatcher()
+        }
     }
 
     private fun setTextWatcher() {
@@ -120,6 +129,15 @@ class EasyEditText : AppCompatEditText {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 textListener?.invoke(s ?: "")
+                if (maxInputLength > 0 && s.toString().length > maxInputLength) {
+                    setText(s.toString().substring(0,maxInputLength))
+                    //光标移至最末端
+                    setSelection(text!!.length)
+                    if (maxToastText.isNotEmpty()){
+
+                    }
+                    maxListener?.invoke()
+                }
             }
         }
         addTextChangedListener(textWatcher)
@@ -148,9 +166,12 @@ class EasyEditText : AppCompatEditText {
     }
 
 
-    fun setOnTextChangeListener(listener: (content: CharSequence) -> Unit) {
+    fun setOnTextChangeListener(listener: (content: CharSequence) -> Unit) =this.apply{
         textListener = listener
     }
 
+    fun setMaxLengthListener(listener: () -> Unit) =this.apply {
+        maxListener = listener
+    }
 
 }
