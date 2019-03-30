@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="EasyEditText">
+        <attr name="maxToastText" format="string"/>
+        <attr name="minToastText" format="string"/>
+        <attr name="maxInputLength" format="integer"/>
+        <attr name="minInputLength" format="integer"/>
+        <attr name="showClearBtn" format="boolean" />
+        <attr name="showPwdBtn" format="boolean"/>
+    </declare-styleable>
+
+
+</resources>
