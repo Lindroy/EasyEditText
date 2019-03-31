@@ -5,8 +5,8 @@
         <attr name="minToastText" format="string"/>
         <attr name="maxInputLength" format="integer"/>
         <attr name="minInputLength" format="integer"/>
-        <attr name="showClearBtn" format="boolean" />
-        <attr name="showPwdBtn" format="boolean"/>
+        <attr name="showClearButton" format="boolean" />
+        <attr name="showPwdButton" format="boolean"/>
     </declare-styleable>
 
 

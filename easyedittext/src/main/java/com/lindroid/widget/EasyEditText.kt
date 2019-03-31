@@ -2,12 +2,13 @@ package com.lindroid.widget
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.drawable.Drawable
+import android.graphics.Rect
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.AppCompatEditText
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
+import android.view.MotionEvent
 
 /**
  * @author Lin
@@ -73,12 +74,7 @@ class EasyEditText : AppCompatEditText {
             }
         }
 
-    /**
-     * 一键清空按钮
-     */
-    private val ivClear: Drawable? by lazy {
-        ContextCompat.getDrawable(context, icClearId)
-    }
+
 
     private var textWatcher: TextWatcher? = null
 
@@ -97,8 +93,8 @@ class EasyEditText : AppCompatEditText {
             maxToastText = it.getString(R.styleable.EasyEditText_maxToastText) ?: ""
             maxInputLength = it.getInt(R.styleable.EasyEditText_maxInputLength, maxInputLength)
             minInputLength = it.getInt(R.styleable.EasyEditText_minInputLength, minInputLength)
-            isShowClearButton = it.getBoolean(R.styleable.EasyEditText_minInputLength, isShowClearButton)
-            isShowPwdButton = it.getBoolean(R.styleable.EasyEditText_showPwdBtn, isShowPwdButton)
+            isShowClearButton = it.getBoolean(R.styleable.EasyEditText_showClearButton, isShowClearButton)
+            isShowPwdButton = it.getBoolean(R.styleable.EasyEditText_showPwdButton, isShowPwdButton)
             it.recycle()
         }
 
@@ -113,27 +109,27 @@ class EasyEditText : AppCompatEditText {
 
     private fun setTextWatcher() {
         if (textWatcher != null) {
-            textWatcher
-            removeTextChangedListener(textWatcher)
+            return
         }
 
         textWatcher = object : TextWatcher {
 
             override fun afterTextChanged(s: Editable?) {
+                if (isShowClearButton) {
+                    setClearDrawable()
+                }
             }
-
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 textListener?.invoke(s ?: "")
                 if (maxInputLength > 0 && s.toString().length > maxInputLength) {
-                    setText(s.toString().substring(0,maxInputLength))
+                    setText(s.toString().substring(0, maxInputLength))
                     //光标移至最末端
                     setSelection(text!!.length)
-                    if (maxToastText.isNotEmpty()){
+                    if (maxToastText.isNotEmpty()) {
 
                     }
                     maxListener?.invoke()
@@ -148,9 +144,11 @@ class EasyEditText : AppCompatEditText {
      * 绘制删除图片
      */
     private fun setClearDrawable() {
-        when (length() < 1) {
-            true -> setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
-            false -> setCompoundDrawablesWithIntrinsicBounds(null, null, ivClear, null)
+        when {
+            length() > 0 && compoundDrawables[2] == null ->
+                setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(context, icClearId), null)
+            length() <= 0 && compoundDrawables[2] != null ->
+                setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
         }
     }
 
@@ -165,12 +163,30 @@ class EasyEditText : AppCompatEditText {
         setCompoundDrawablesWithIntrinsicBounds(null, null, ivPwd, null)
     }
 
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        if (event?.action == MotionEvent.ACTION_UP) {
+            when {
+                isShowClearButton -> {
+                    val eventX = event.rawX.toInt()
+                    val eventY = event.rawY.toInt()
+                    val rect = Rect()
+                    getGlobalVisibleRect(rect)
+                    rect.left = rect.right - 100
+                    if (rect.contains(eventX, eventY)) {
+                        setText("")
+                    }
+                }
+            }
+        }
+        return super.onTouchEvent(event)
+    }
 
-    fun setOnTextChangeListener(listener: (content: CharSequence) -> Unit) =this.apply{
+
+    fun setOnTextChangeListener(listener: (content: CharSequence) -> Unit) = this.apply {
         textListener = listener
     }
 
-    fun setMaxLengthListener(listener: () -> Unit) =this.apply {
+    fun setMaxLengthListener(listener: () -> Unit) = this.apply {
         maxListener = listener
     }
 
