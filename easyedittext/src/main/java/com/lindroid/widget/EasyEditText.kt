@@ -6,6 +6,7 @@ import android.graphics.Rect
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.AppCompatEditText
 import android.text.Editable
+import android.text.InputType
 import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -57,7 +58,7 @@ class EasyEditText : AppCompatEditText {
             if (field) {
                 setTextWatcher()
             } else {
-//                clearRightDrawable()
+                removeDrawable()
             }
         }
 
@@ -67,13 +68,12 @@ class EasyEditText : AppCompatEditText {
     var isShowPwdButton = false
         set(value) {
             field = value
-            if (!isShowClearButton && field) {
-//                initPwdBtn()
-            } else {
-//                clearRightDrawable()
-            }
+            initPwdButton()
+            /* if (!isShowClearButton && field) {
+             } else {
+                 removeDrawable()
+             }*/
         }
-
 
 
     private var textWatcher: TextWatcher? = null
@@ -98,14 +98,29 @@ class EasyEditText : AppCompatEditText {
             it.recycle()
         }
 
-        init()
+//        init()
     }
 
     private fun init() {
         if (maxInputLength > 0 || minInputLength > 0 || isShowClearButton) {
             setTextWatcher()
         }
+
     }
+
+    private fun initPwdButton() {
+        if (!isShowClearButton && isShowPwdButton) {
+            when (inputType) {
+                InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD -> setPwdDrawable(true)
+                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD -> setPwdDrawable(false)
+                else -> {
+                    inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                    setPwdDrawable(true)
+                }
+            }
+        }
+    }
+
 
     private fun setTextWatcher() {
         if (textWatcher != null) {
@@ -163,29 +178,58 @@ class EasyEditText : AppCompatEditText {
         setCompoundDrawablesWithIntrinsicBounds(null, null, ivPwd, null)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event?.action == MotionEvent.ACTION_UP) {
-            when {
-                isShowClearButton -> {
-                    val eventX = event.rawX.toInt()
-                    val eventY = event.rawY.toInt()
-                    val rect = Rect()
-                    getGlobalVisibleRect(rect)
-                    rect.left = rect.right - 100
-                    if (rect.contains(eventX, eventY)) {
+            val eventX = event.rawX.toInt()
+            val eventY = event.rawY.toInt()
+            val rect = Rect()
+            getGlobalVisibleRect(rect)
+            rect.left = rect.right - 100
+            if (rect.contains(eventX, eventY)) {
+                when {
+                    isShowClearButton -> {
                         setText("")
+                    }
+                    !isShowClearButton && isShowPwdButton -> {
+                        when (inputType) {
+                            InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD -> {
+                                //设置密码为暗文，并更改眼睛图标
+                                inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                                setPwdDrawable(false)
+                            }
+                            InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD -> {
+                                //设置密码为明文，并更改眼睛图标
+                                inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                                setPwdDrawable(true)
+                            }
+                        }
+                        setSelection(length())
                     }
                 }
             }
+
         }
         return super.onTouchEvent(event)
     }
 
+    /**
+     * 移除所有的图标
+     */
+    private fun removeDrawable() {
+        setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
+    }
 
+    /**
+     * 设置文本改变监听事件
+     */
     fun setOnTextChangeListener(listener: (content: CharSequence) -> Unit) = this.apply {
         textListener = listener
     }
 
+    /**
+     * 设置超过最长限定字符监听事件
+     */
     fun setMaxLengthListener(listener: () -> Unit) = this.apply {
         maxListener = listener
     }

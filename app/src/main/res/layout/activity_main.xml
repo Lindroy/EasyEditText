@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:maxInputLength="5"
+        android:inputType="textPassword"
         app:maxToastText="最大不能超过5"
-        app:showClearButton="true" />
+        app:showPwdButton="true" />
 
 </LinearLayout>
