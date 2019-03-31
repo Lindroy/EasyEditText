@@ -6,10 +6,12 @@ import android.graphics.Rect
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.AppCompatEditText
 import android.text.Editable
-import android.text.InputType
 import android.text.TextWatcher
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.util.AttributeSet
 import android.view.MotionEvent
+import android.view.inputmethod.EditorInfo
 
 /**
  * @author Lin
@@ -17,6 +19,7 @@ import android.view.MotionEvent
  * @function 自定义EditText
  * @Description
  */
+
 class EasyEditText : AppCompatEditText {
     private val icClearId = R.drawable.ic_clear
     private val icShowPwd = R.drawable.ic_pwd_visible
@@ -75,6 +78,11 @@ class EasyEditText : AppCompatEditText {
              }*/
         }
 
+    /**
+     * 是否显示明文
+     */
+    private var isShowContent = true
+
 
     private var textWatcher: TextWatcher? = null
 
@@ -105,19 +113,20 @@ class EasyEditText : AppCompatEditText {
         if (maxInputLength > 0 || minInputLength > 0 || isShowClearButton) {
             setTextWatcher()
         }
-
+        initPwdButton()
     }
 
     private fun initPwdButton() {
         if (!isShowClearButton && isShowPwdButton) {
-            when (inputType) {
-                InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD -> setPwdDrawable(true)
-                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD -> setPwdDrawable(false)
-                else -> {
-                    inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-                    setPwdDrawable(true)
-                }
+            isShowContent = when (inputType) {
+                EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD -> true
+                (EditorInfo.TYPE_CLASS_TEXT or EditorInfo.TYPE_TEXT_VARIATION_PASSWORD) //文本密码
+                    , (EditorInfo.TYPE_CLASS_NUMBER or EditorInfo.TYPE_NUMBER_VARIATION_PASSWORD) //数字密码
+                    , (EditorInfo.TYPE_CLASS_TEXT or EditorInfo.TYPE_TEXT_VARIATION_WEB_PASSWORD) //网址形式的密码
+                -> false
+                else -> true
             }
+            setPwdDrawable(true)
         }
     }
 
@@ -192,18 +201,13 @@ class EasyEditText : AppCompatEditText {
                         setText("")
                     }
                     !isShowClearButton && isShowPwdButton -> {
-                        when (inputType) {
-                            InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD -> {
-                                //设置密码为暗文，并更改眼睛图标
-                                inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-                                setPwdDrawable(false)
-                            }
-                            InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD -> {
-                                //设置密码为明文，并更改眼睛图标
-                                inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-                                setPwdDrawable(true)
-                            }
+                        isShowContent = !isShowContent
+                        transformationMethod = if (isShowContent) {
+                            HideReturnsTransformationMethod.getInstance()
+                        } else {
+                            PasswordTransformationMethod.getInstance()
                         }
+                        setPwdDrawable(isShowContent)
                         setSelection(length())
                     }
                 }

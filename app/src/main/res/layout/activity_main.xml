@@ -4,15 +4,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="限定最长字符" />
+
     <com.lindroid.widget.EasyEditText
-        android:id="@+id/editText"
+        android:id="@+id/etMax"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        app:maxInputLength="5"
-        android:inputType="textPassword"
-        app:maxToastText="最大不能超过5"
+        android:hint="@string/hint_input"
+        app:maxInputLength="5" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="一键清空内容" />
+
+    <com.lindroid.widget.EasyEditText
+        android:id="@+id/eClearAll"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="@string/hint_input"
+        app:showClearButton="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="显示/隐藏密码" />
+
+    <com.lindroid.widget.EasyEditText
+        android:id="@+id/etPwd"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="@string/hint_input"
+        android:inputType="textWebPassword"
         app:showPwdButton="true" />
+
+
+    <EditText
+        android:id="@+id/et"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:inputType="numberPassword" />
 
 </LinearLayout>
