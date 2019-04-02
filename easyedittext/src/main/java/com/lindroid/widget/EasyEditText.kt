@@ -21,9 +21,9 @@ import android.view.inputmethod.EditorInfo
  */
 
 class EasyEditText : AppCompatEditText {
-    private val icClearId = R.drawable.ic_clear
-    private val icShowPwd = R.drawable.ic_pwd_visible
-    private val icHidePwd = R.drawable.ic_pwd_invisible
+    private var icClearId = R.drawable.ic_clear
+    private var icShowPwd = R.drawable.ic_pwd_visible
+    private var icHidePwd = R.drawable.ic_pwd_invisible
 
     /**
      * 超过最大输入字符数时的提示文字
@@ -90,6 +90,8 @@ class EasyEditText : AppCompatEditText {
 
     private var maxListener: (() -> Unit)? = null
 
+    private var emptyListener: (() -> Unit)? = null
+
     constructor(context: Context?) : this(context, null)
     //默认style为R.attr.editTextStyle才能获取焦点
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, android.R.attr.editTextStyle)
@@ -103,6 +105,9 @@ class EasyEditText : AppCompatEditText {
             minInputLength = it.getInt(R.styleable.EasyEditText_minInputLength, minInputLength)
             isShowClearButton = it.getBoolean(R.styleable.EasyEditText_showClearButton, isShowClearButton)
             isShowPwdButton = it.getBoolean(R.styleable.EasyEditText_showPwdButton, isShowPwdButton)
+            icClearId = it.getResourceId(R.styleable.EasyEditText_clearAllContentIcon, icClearId)
+            icShowPwd = it.getResourceId(R.styleable.EasyEditText_showContentIcon, icShowPwd)
+            icHidePwd = it.getResourceId(R.styleable.EasyEditText_hideContentIcon, icHidePwd)
             it.recycle()
         }
 
@@ -149,6 +154,9 @@ class EasyEditText : AppCompatEditText {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 textListener?.invoke(s ?: "")
+                if (s != null && s.isEmpty()) {
+                    emptyListener?.invoke()
+                }
                 if (maxInputLength > 0 && s.toString().length > maxInputLength) {
                     setText(s.toString().substring(0, maxInputLength))
                     //光标移至最末端
@@ -236,6 +244,13 @@ class EasyEditText : AppCompatEditText {
      */
     fun setMaxLengthListener(listener: () -> Unit) = this.apply {
         maxListener = listener
+    }
+
+    /**
+     * 设置输入框为空的监听
+     */
+    fun setEmptyListener(listener: () -> Unit) {
+        emptyListener = listener
     }
 
 }

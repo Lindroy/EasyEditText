@@ -45,10 +45,4 @@
         app:showPwdButton="true" />
 
 
-    <EditText
-        android:id="@+id/et"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:inputType="numberPassword" />
-
 </LinearLayout>
