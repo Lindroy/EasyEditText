@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        tvEmpty.text = "监听是否为空:${etEmpty.text.toString().isEmpty()}"
         etMax.apply {
             setOnTextChangeListener {
                 Log.d(EASY_TAG, "输入的内容：$it")
@@ -23,6 +24,9 @@ class MainActivity : AppCompatActivity() {
             setMaxLengthListener {
                 Toast.makeText(mContext, "输入的内容过长", Toast.LENGTH_SHORT).show()
             }
+        }
+        etEmpty.setEmptyChangeListener {
+            tvEmpty.text = "监听是否为空:$it"
         }
 
     }

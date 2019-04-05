@@ -1,4 +1,4 @@
-package com.lindroid.widget;
+package com.lindroid.view;
 
 import org.junit.Test;
 

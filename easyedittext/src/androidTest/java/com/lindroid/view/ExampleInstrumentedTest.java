@@ -1,4 +1,4 @@
-package com.lindroid.widget;
+package com.lindroid.view;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

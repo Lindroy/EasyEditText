@@ -1,4 +1,4 @@
-package com.lindroid.widget
+package com.lindroid.view
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -90,7 +90,9 @@ class EasyEditText : AppCompatEditText {
 
     private var maxListener: (() -> Unit)? = null
 
-    private var emptyListener: (() -> Unit)? = null
+    private var emptyListener: ((isEmpty: Boolean) -> Unit)? = null
+
+    private var isEmpty: Boolean = false
 
     constructor(context: Context?) : this(context, null)
     //默认style为R.attr.editTextStyle才能获取焦点
@@ -110,7 +112,7 @@ class EasyEditText : AppCompatEditText {
             icHidePwd = it.getResourceId(R.styleable.EasyEditText_hideContentIcon, icHidePwd)
             it.recycle()
         }
-
+        isEmpty = text.toString().isEmpty()
 //        init()
     }
 
@@ -153,10 +155,25 @@ class EasyEditText : AppCompatEditText {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                //监听字符输入
                 textListener?.invoke(s ?: "")
-                if (s != null && s.isEmpty()) {
-                    emptyListener?.invoke()
+
+                //监听是否为空
+                when (s != null && s.isEmpty()) {
+                    true -> {
+                        isEmpty = true
+                        emptyListener?.invoke(true)
+                    }
+                    false -> {
+                        if (!isEmpty) {
+                            return
+                        }
+                        isEmpty = false
+                        emptyListener?.invoke(false)
+                    }
                 }
+
+                //监听最大输入字符
                 if (maxInputLength > 0 && s.toString().length > maxInputLength) {
                     setText(s.toString().substring(0, maxInputLength))
                     //光标移至最末端
@@ -249,7 +266,7 @@ class EasyEditText : AppCompatEditText {
     /**
      * 设置输入框为空的监听
      */
-    fun setEmptyListener(listener: () -> Unit) {
+    fun setEmptyChangeListener(listener: (isEmpty: Boolean) -> Unit) {
         emptyListener = listener
     }
 
