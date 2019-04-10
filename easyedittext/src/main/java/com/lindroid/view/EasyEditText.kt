@@ -19,7 +19,7 @@ import android.view.inputmethod.EditorInfo
  * @function 自定义EditText
  * @Description
  */
-const val TAG = "Tag"
+private const val TAG = "Tag"
 class EasyEditText : AppCompatEditText {
     private var icClearId = R.drawable.ic_clear
     private var icShowPwd = R.drawable.ic_pwd_visible
@@ -43,10 +43,12 @@ class EasyEditText : AppCompatEditText {
      */
     var maxInputLength = -1
         set(value) {
+
             field = value
             if (field != -1) {
                 setTextWatcher()
             }
+
         }
 
     /**
@@ -112,11 +114,11 @@ class EasyEditText : AppCompatEditText {
             maxToastText = it.getString(R.styleable.EasyEditText_maxToastText) ?: ""
             maxInputLength = it.getInt(R.styleable.EasyEditText_maxInputLength, maxInputLength)
             minInputLength = it.getInt(R.styleable.EasyEditText_minInputLength, minInputLength)
-            isShowClearButton = it.getBoolean(R.styleable.EasyEditText_showClearButton, isShowClearButton)
-            isShowPwdButton = it.getBoolean(R.styleable.EasyEditText_showPwdButton, isShowPwdButton)
             icClearId = it.getResourceId(R.styleable.EasyEditText_clearAllContentIcon, icClearId)
             icShowPwd = it.getResourceId(R.styleable.EasyEditText_showContentIcon, icShowPwd)
             icHidePwd = it.getResourceId(R.styleable.EasyEditText_hideContentIcon, icHidePwd)
+            isShowPwdButton = it.getBoolean(R.styleable.EasyEditText_showPwdButton, isShowPwdButton)
+            isShowClearButton = it.getBoolean(R.styleable.EasyEditText_showClearButton, isShowClearButton)
             it.recycle()
         }
         isEmpty = text.toString().isEmpty()
