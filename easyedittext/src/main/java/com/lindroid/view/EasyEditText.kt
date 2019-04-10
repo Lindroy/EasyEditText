@@ -22,12 +22,12 @@ import android.view.inputmethod.EditorInfo
 private const val TAG = "Tag"
 class EasyEditText : AppCompatEditText {
     private var icClearId = R.drawable.ic_clear
-    private var icShowPwd = R.drawable.ic_pwd_visible
+    private var icShowPwd = R.drawable.ic_content_visible
         set(value) {
             field = value
             initPwdButton()
         }
-    private var icHidePwd = R.drawable.ic_pwd_invisible
+    private var icHidePwd = R.drawable.ic_content_invisible
         set(value) {
             field = value
             initPwdButton()
@@ -42,13 +42,11 @@ class EasyEditText : AppCompatEditText {
      * 最大输入字符数，-1表示不做限制
      */
     var maxInputLength = -1
-        set(value) {
-
+        private set(value) {
             field = value
             if (field != -1) {
                 setTextWatcher()
             }
-
         }
 
     /**
@@ -78,7 +76,7 @@ class EasyEditText : AppCompatEditText {
     /**
      * 是否显示设置密码可见的按钮，前提是不显示删除按钮
      */
-    var isShowPwdButton = false
+    var isShowVisibilityToggle = false
         set(value) {
             field = value
             initPwdButton()
@@ -117,7 +115,7 @@ class EasyEditText : AppCompatEditText {
             icClearId = it.getResourceId(R.styleable.EasyEditText_clearAllContentIcon, icClearId)
             icShowPwd = it.getResourceId(R.styleable.EasyEditText_showContentIcon, icShowPwd)
             icHidePwd = it.getResourceId(R.styleable.EasyEditText_hideContentIcon, icHidePwd)
-            isShowPwdButton = it.getBoolean(R.styleable.EasyEditText_showPwdButton, isShowPwdButton)
+            isShowVisibilityToggle = it.getBoolean(R.styleable.EasyEditText_showVisibilityToggle, isShowVisibilityToggle)
             isShowClearButton = it.getBoolean(R.styleable.EasyEditText_showClearButton, isShowClearButton)
             it.recycle()
         }
@@ -133,7 +131,7 @@ class EasyEditText : AppCompatEditText {
     }
 
     private fun initPwdButton() {
-        if (!isShowClearButton && isShowPwdButton) {
+        if (!isShowClearButton && isShowVisibilityToggle) {
             isShowContent = when (inputType) {
                 EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD -> true
                 (EditorInfo.TYPE_CLASS_TEXT or EditorInfo.TYPE_TEXT_VARIATION_PASSWORD) //文本密码
@@ -228,7 +226,7 @@ class EasyEditText : AppCompatEditText {
                     isShowClearButton -> {
                         setText("")
                     }
-                    !isShowClearButton && isShowPwdButton -> {
+                    !isShowClearButton && isShowVisibilityToggle -> {
                         isShowContent = !isShowContent
                         transformationMethod = if (isShowContent) {
                             HideReturnsTransformationMethod.getInstance()
@@ -250,6 +248,13 @@ class EasyEditText : AppCompatEditText {
      */
     private fun removeDrawable() {
         setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        textListener = null
+        maxListener = null
+        emptyListener = null
     }
 
     /**

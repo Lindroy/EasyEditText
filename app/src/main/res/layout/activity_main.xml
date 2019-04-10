@@ -42,7 +42,7 @@
         android:layout_height="50dp"
         android:hint="@string/hint_input"
         android:inputType="numberPassword"
-        app:showPwdButton="true" />
+        app:showVisibilityToggle="true" />
 
     <TextView
         android:id="@+id/tvEmpty"
@@ -79,7 +79,7 @@
         android:inputType="numberPassword"
         app:showContentIcon="@drawable/ic_open"
         app:hideContentIcon="@drawable/ic_close"
-        app:showPwdButton="true"
+        app:showVisibilityToggle="true"
         android:id="@+id/etCustomPwd"
         android:hint="@string/hint_input"
         android:layout_width="match_parent"

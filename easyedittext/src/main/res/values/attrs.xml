@@ -6,7 +6,7 @@
         <attr name="maxInputLength" format="integer"/>
         <attr name="minInputLength" format="integer"/>
         <attr name="showClearButton" format="boolean" />
-        <attr name="showPwdButton" format="boolean"/>
+        <attr name="showVisibilityToggle" format="boolean" />
         <attr name="clearAllContentIcon" format="reference" />
         <attr name="showContentIcon" format="reference" />
         <attr name="hideContentIcon" format="reference" />

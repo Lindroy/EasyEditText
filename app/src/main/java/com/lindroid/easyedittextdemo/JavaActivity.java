@@ -1,7 +1,9 @@
 package com.lindroid.easyedittextdemo;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
+import com.lindroid.view.EasyEditText;
 
 public class JavaActivity extends AppCompatActivity {
 
@@ -9,6 +11,7 @@ public class JavaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_java);
-//        findViewById(R.id.editText).se
+        EasyEditText editText = findViewById(R.id.editText);
+
     }
 }
