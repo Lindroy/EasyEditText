@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         tvEmpty.text = "监听是否为空:${etEmpty.text.toString().isEmpty()}"
         etMax.apply {
-            setOnTextChangeListener {
+            setTextChangeListener {
                 Log.d(EASY_TAG, "输入的内容：$it")
             }
             setMaxLengthListener {

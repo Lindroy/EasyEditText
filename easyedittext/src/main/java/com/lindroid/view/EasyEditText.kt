@@ -10,6 +10,7 @@ import android.text.TextWatcher
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.inputmethod.EditorInfo
 
@@ -19,11 +20,19 @@ import android.view.inputmethod.EditorInfo
  * @function 自定义EditText
  * @Description
  */
-
+const val TAG = "Tag"
 class EasyEditText : AppCompatEditText {
     private var icClearId = R.drawable.ic_clear
     private var icShowPwd = R.drawable.ic_pwd_visible
+        set(value) {
+            field = value
+            initPwdButton()
+        }
     private var icHidePwd = R.drawable.ic_pwd_invisible
+        set(value) {
+            field = value
+            initPwdButton()
+        }
 
     /**
      * 超过最大输入字符数时的提示文字
@@ -83,7 +92,6 @@ class EasyEditText : AppCompatEditText {
      */
     private var isShowContent = true
 
-
     private var textWatcher: TextWatcher? = null
 
     private var textListener: ((s: CharSequence) -> Unit)? = null
@@ -133,7 +141,7 @@ class EasyEditText : AppCompatEditText {
                 -> false
                 else -> true
             }
-            setPwdDrawable(true)
+            setPwdDrawable(isShowContent)
         }
     }
 
@@ -142,7 +150,6 @@ class EasyEditText : AppCompatEditText {
         if (textWatcher != null) {
             return
         }
-
         textWatcher = object : TextWatcher {
 
             override fun afterTextChanged(s: Editable?) {
@@ -172,21 +179,16 @@ class EasyEditText : AppCompatEditText {
                         emptyListener?.invoke(false)
                     }
                 }
-
                 //监听最大输入字符
                 if (maxInputLength > 0 && s.toString().length > maxInputLength) {
                     setText(s.toString().substring(0, maxInputLength))
                     //光标移至最末端
                     setSelection(text!!.length)
-                    if (maxToastText.isNotEmpty()) {
-
-                    }
                     maxListener?.invoke()
                 }
             }
         }
         addTextChangedListener(textWatcher)
-
     }
 
     /**
@@ -215,11 +217,19 @@ class EasyEditText : AppCompatEditText {
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event?.action == MotionEvent.ACTION_UP) {
-            val eventX = event.rawX.toInt()
-            val eventY = event.rawY.toInt()
+
+            val eventX = event.x.toInt()
+            val eventY = event.y.toInt()
+            Log.e(TAG,"eventX=$eventX")
+            Log.e(TAG,"eventY=$eventY")
             val rect = Rect()
-            getGlobalVisibleRect(rect)
+            Log.e(TAG,"rect:left=${rect.left},top=${rect.top},right=${rect.right},bottom=${rect.bottom}")
+
+            getLocalVisibleRect(rect)
+            Log.e(TAG,"rect2:left=${rect.left},top=${rect.top},right=${rect.right},bottom=${rect.bottom}")
+
             rect.left = rect.right - 100
+            Log.e(TAG,"rect3:left=${rect.left},top=${rect.top},right=${rect.right},bottom=${rect.bottom}")
             if (rect.contains(eventX, eventY)) {
                 when {
                     isShowClearButton -> {
@@ -252,7 +262,7 @@ class EasyEditText : AppCompatEditText {
     /**
      * 设置文本改变监听事件
      */
-    fun setOnTextChangeListener(listener: (content: CharSequence) -> Unit) = this.apply {
+    fun setTextChangeListener(listener: (content: CharSequence) -> Unit) = this.apply {
         textListener = listener
     }
 
