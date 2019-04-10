@@ -10,7 +10,6 @@ import android.text.TextWatcher
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.inputmethod.EditorInfo
 
@@ -217,19 +216,11 @@ class EasyEditText : AppCompatEditText {
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event?.action == MotionEvent.ACTION_UP) {
-
             val eventX = event.x.toInt()
             val eventY = event.y.toInt()
-            Log.e(TAG,"eventX=$eventX")
-            Log.e(TAG,"eventY=$eventY")
             val rect = Rect()
-            Log.e(TAG,"rect:left=${rect.left},top=${rect.top},right=${rect.right},bottom=${rect.bottom}")
-
             getLocalVisibleRect(rect)
-            Log.e(TAG,"rect2:left=${rect.left},top=${rect.top},right=${rect.right},bottom=${rect.bottom}")
-
             rect.left = rect.right - 100
-            Log.e(TAG,"rect3:left=${rect.left},top=${rect.top},right=${rect.right},bottom=${rect.bottom}")
             if (rect.contains(eventX, eventY)) {
                 when {
                     isShowClearButton -> {
