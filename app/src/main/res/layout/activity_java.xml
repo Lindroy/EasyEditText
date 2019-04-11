@@ -7,10 +7,13 @@
     tools:context=".JavaActivity">
 
     <com.lindroid.view.EasyEditText
-            android:id="@+id/editText"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="@string/hint_input"
-            app:maxInputLength="5" />
+        android:id="@+id/editText"
+        android:inputType="textVisiblePassword"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="@string/hint_input"
+        app:maxCharacters="5"
+        app:showVisibilityToggle="true" />
+
 
 </FrameLayout>

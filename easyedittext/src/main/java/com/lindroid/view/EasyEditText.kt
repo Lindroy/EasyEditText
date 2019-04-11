@@ -3,6 +3,8 @@ package com.lindroid.view
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Rect
+import android.graphics.drawable.Drawable
+import android.support.annotation.DrawableRes
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.AppCompatEditText
 import android.text.Editable
@@ -19,19 +21,28 @@ import android.view.inputmethod.EditorInfo
  * @function 自定义EditText
  * @Description
  */
-private const val TAG = "Tag"
+const val TAG = "Tag"
+
 class EasyEditText : AppCompatEditText {
-    private var icClearId = R.drawable.ic_clear
-    private var icShowPwd = R.drawable.ic_content_visible
-        set(value) {
+
+    var clearIcon: Int = R.drawable.ic_clear
+        set(@DrawableRes value) {
             field = value
-            initPwdButton()
+            setTextWatcher()
         }
-    private var icHidePwd = R.drawable.ic_content_invisible
-        set(value) {
+
+    var displayIcon = R.drawable.ic_content_display
+        set(@DrawableRes value) {
             field = value
-            initPwdButton()
+            initContentToggle()
         }
+
+    var hideIcon = R.drawable.ic_content_hide
+        set(@DrawableRes value) {
+            field = value
+            initContentToggle()
+        }
+
 
     /**
      * 超过最大输入字符数时的提示文字
@@ -41,21 +52,10 @@ class EasyEditText : AppCompatEditText {
     /**
      * 最大输入字符数，-1表示不做限制
      */
-    var maxInputLength = -1
+    var maxCharacters = -1
         private set(value) {
             field = value
             if (field != -1) {
-                setTextWatcher()
-            }
-        }
-
-    /**
-     * 最小输入字符数，小于0表示不做限制
-     */
-    var minInputLength = 0
-        set(value) {
-            field = value
-            if (field > 0) {
                 setTextWatcher()
             }
         }
@@ -79,17 +79,21 @@ class EasyEditText : AppCompatEditText {
     var isShowVisibilityToggle = false
         set(value) {
             field = value
-            initPwdButton()
-            /* if (!isShowClearButton && field) {
-             } else {
-                 removeDrawable()
-             }*/
+            if (!isShowClearButton) {
+                if (field && rightDrawable == null) {
+                    initContentToggle()
+                } else if (!field) {
+                    removeDrawable()
+                }
+            }
         }
 
     /**
      * 是否显示明文
      */
-    private var isShowContent = true
+    private var isDisplayContent = true
+
+    private var isPwdType = false
 
     private var textWatcher: TextWatcher? = null
 
@@ -101,49 +105,68 @@ class EasyEditText : AppCompatEditText {
 
     private var isEmpty: Boolean = false
 
+    /**
+     * 右侧图标
+     */
+    private val rightDrawable: Drawable?
+        get() = compoundDrawables[2]
+
+    private var isInit = false
+
     constructor(context: Context?) : this(context, null)
     //默认style为R.attr.editTextStyle才能获取焦点
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, android.R.attr.editTextStyle)
 
     @SuppressLint("Recycle")
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+        initInputType()
         val typedArray = context?.obtainStyledAttributes(attrs, R.styleable.EasyEditText, defStyleAttr, 0)
         typedArray?.let {
-            maxToastText = it.getString(R.styleable.EasyEditText_maxToastText) ?: ""
-            maxInputLength = it.getInt(R.styleable.EasyEditText_maxInputLength, maxInputLength)
-            minInputLength = it.getInt(R.styleable.EasyEditText_minInputLength, minInputLength)
-            icClearId = it.getResourceId(R.styleable.EasyEditText_clearAllContentIcon, icClearId)
-            icShowPwd = it.getResourceId(R.styleable.EasyEditText_showContentIcon, icShowPwd)
-            icHidePwd = it.getResourceId(R.styleable.EasyEditText_hideContentIcon, icHidePwd)
-            isShowVisibilityToggle = it.getBoolean(R.styleable.EasyEditText_showVisibilityToggle, isShowVisibilityToggle)
+            //            maxToastText = it.getString(R.styleable.EasyEditText_maxToastText) ?: ""
+            isShowVisibilityToggle =
+                    it.getBoolean(R.styleable.EasyEditText_showVisibilityToggle, isShowVisibilityToggle)
             isShowClearButton = it.getBoolean(R.styleable.EasyEditText_showClearButton, isShowClearButton)
+            maxCharacters = it.getInt(R.styleable.EasyEditText_maxCharacters, maxCharacters)
+            clearIcon = it.getResourceId(R.styleable.EasyEditText_clearContentIcon, clearIcon)
+            displayIcon = it.getResourceId(R.styleable.EasyEditText_displayContentIcon, displayIcon)
+            hideIcon = it.getResourceId(R.styleable.EasyEditText_hideContentIcon, hideIcon)
+
             it.recycle()
         }
+        isInit = true
         isEmpty = text.toString().isEmpty()
-//        init()
+        initContentToggle()
     }
 
-    private fun init() {
-        if (maxInputLength > 0 || minInputLength > 0 || isShowClearButton) {
-            setTextWatcher()
-        }
-        initPwdButton()
-    }
-
-    private fun initPwdButton() {
-        if (!isShowClearButton && isShowVisibilityToggle) {
-            isShowContent = when (inputType) {
-                EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD -> true
-                (EditorInfo.TYPE_CLASS_TEXT or EditorInfo.TYPE_TEXT_VARIATION_PASSWORD) //文本密码
-                    , (EditorInfo.TYPE_CLASS_NUMBER or EditorInfo.TYPE_NUMBER_VARIATION_PASSWORD) //数字密码
-                    , (EditorInfo.TYPE_CLASS_TEXT or EditorInfo.TYPE_TEXT_VARIATION_WEB_PASSWORD) //网址形式的密码
-                -> false
-                else -> true
+    private fun initInputType() {
+        when (inputType) {
+            EditorInfo.TYPE_CLASS_TEXT or EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD -> {
+                isPwdType = true
+                isDisplayContent = true
             }
-            setPwdDrawable(isShowContent)
+            (EditorInfo.TYPE_CLASS_TEXT or EditorInfo.TYPE_TEXT_VARIATION_PASSWORD) //文本密码
+                , (EditorInfo.TYPE_CLASS_NUMBER or EditorInfo.TYPE_NUMBER_VARIATION_PASSWORD) //数字密码
+                , (EditorInfo.TYPE_CLASS_TEXT or EditorInfo.TYPE_TEXT_VARIATION_WEB_PASSWORD) //网址形式的密码
+            -> {
+                isPwdType = true
+                isDisplayContent = false
+            }
+            else -> {
+                isPwdType = false
+                isDisplayContent = true
+            }
         }
     }
 
+
+    /**
+     * 初始化明暗文切换按钮
+     */
+    private fun initContentToggle() {
+        if (isInit && isPwdType && !isShowClearButton && isShowVisibilityToggle) {
+            setPwdDrawable()
+        }
+    }
 
     private fun setTextWatcher() {
         if (textWatcher != null) {
@@ -179,8 +202,8 @@ class EasyEditText : AppCompatEditText {
                     }
                 }
                 //监听最大输入字符
-                if (maxInputLength > 0 && s.toString().length > maxInputLength) {
-                    setText(s.toString().substring(0, maxInputLength))
+                if (maxCharacters > 0 && s.toString().length > maxCharacters) {
+                    setText(s.toString().substring(0, maxCharacters))
                     //光标移至最末端
                     setSelection(text!!.length)
                     maxListener?.invoke()
@@ -195,20 +218,20 @@ class EasyEditText : AppCompatEditText {
      */
     private fun setClearDrawable() {
         when {
-            length() > 0 && compoundDrawables[2] == null ->
-                setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(context, icClearId), null)
-            length() <= 0 && compoundDrawables[2] != null ->
+            length() > 0 && rightDrawable == null ->
+                setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(context, clearIcon), null)
+            length() <= 0 && rightDrawable != null ->
                 setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
         }
     }
 
     /**
-     * 绘制设置密码是否可以见的图标
+     * 绘制设置密码是否可见的图标
      */
-    private fun setPwdDrawable(isPwdVisible: Boolean) {
-        val ivPwd = when (isPwdVisible) {
-            true -> ContextCompat.getDrawable(context, icShowPwd)
-            false -> ContextCompat.getDrawable(context, icHidePwd)
+    private fun setPwdDrawable() {
+        val ivPwd = when (isDisplayContent) {
+            true -> ContextCompat.getDrawable(context, displayIcon)
+            false -> ContextCompat.getDrawable(context, hideIcon)
         }
         setCompoundDrawablesWithIntrinsicBounds(null, null, ivPwd, null)
     }
@@ -227,13 +250,13 @@ class EasyEditText : AppCompatEditText {
                         setText("")
                     }
                     !isShowClearButton && isShowVisibilityToggle -> {
-                        isShowContent = !isShowContent
-                        transformationMethod = if (isShowContent) {
+                        isDisplayContent = !isDisplayContent
+                        transformationMethod = if (isDisplayContent) {
                             HideReturnsTransformationMethod.getInstance()
                         } else {
                             PasswordTransformationMethod.getInstance()
                         }
-                        setPwdDrawable(isShowContent)
+                        setPwdDrawable()
                         setSelection(length())
                     }
                 }

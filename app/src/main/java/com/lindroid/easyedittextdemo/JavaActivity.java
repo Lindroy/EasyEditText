@@ -12,6 +12,7 @@ public class JavaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_java);
         EasyEditText editText = findViewById(R.id.editText);
-
+        editText.setDisplayIcon(R.drawable.ic_open);
+        editText.setHideIcon(R.drawable.ic_close);
     }
 }

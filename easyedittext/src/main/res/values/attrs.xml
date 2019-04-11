@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="EasyEditText">
-        <attr name="maxToastText" format="string"/>
-        <attr name="minToastText" format="string"/>
-        <attr name="maxInputLength" format="integer"/>
-        <attr name="minInputLength" format="integer"/>
+        <!--<attr name="maxToastText" format="string"/>-->
+        <attr name="maxCharacters" format="integer"/>
         <attr name="showClearButton" format="boolean" />
         <attr name="showVisibilityToggle" format="boolean" />
-        <attr name="clearAllContentIcon" format="reference" />
-        <attr name="showContentIcon" format="reference" />
+        <attr name="clearContentIcon" format="reference" />
+        <attr name="displayContentIcon" format="reference" />
         <attr name="hideContentIcon" format="reference" />
     </declare-styleable>
 

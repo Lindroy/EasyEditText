@@ -25,9 +25,13 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(mContext, "输入的内容过长", Toast.LENGTH_SHORT).show()
             }
         }
+        etCustomClear.isShowClearButton = true
         etEmpty.setEmptyChangeListener {
             tvEmpty.text = "监听是否为空:$it"
         }
+        etCustomPwd.isShowVisibilityToggle = false
+        etCustomPwd.displayIcon = R.drawable.ic_open
+        etCustomPwd.hideIcon = R.drawable.ic_close
 
     }
 }
