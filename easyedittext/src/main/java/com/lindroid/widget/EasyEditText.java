@@ -6,6 +6,7 @@ import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
@@ -17,6 +18,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.inputmethod.EditorInfo;
+
 import com.lindroid.view.R;
 
 /**
@@ -26,6 +28,7 @@ import com.lindroid.view.R;
  * @Description
  */
 public class EasyEditText extends AppCompatEditText {
+    private String TAG = "EasyTag";
     private int clearIcon = R.drawable.ic_clear;
 
     private int displayIcon = R.drawable.ic_content_display;
@@ -64,10 +67,10 @@ public class EasyEditText extends AppCompatEditText {
     private OnEmptyChangeListener emptyListener = null;
 
     public EasyEditText(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
-    public EasyEditText(Context context, AttributeSet attrs){
+    public EasyEditText(Context context, AttributeSet attrs) {
         this(context, attrs, android.R.attr.editTextStyle);
     }
 
@@ -82,7 +85,6 @@ public class EasyEditText extends AppCompatEditText {
         isShowVisibilityToggle =
                 ta.getBoolean(R.styleable.EasyEditText_showVisibilityToggle, isShowVisibilityToggle);
         setMaxCharacters(ta.getInt(R.styleable.EasyEditText_maxCharacters, maxCharacters));
-        Log.e("Tag","maxCharacters="+maxCharacters);
         ta.recycle();
         if (getText() != null) {
             isEmpty = getText().toString().isEmpty();
@@ -120,24 +122,17 @@ public class EasyEditText extends AppCompatEditText {
     }
 
     private void setTextWatcher() {
-        Log.e("Tag","setTextWatcher()");
         if (textWatcher != null) {
             return;
         }
         textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 CharSequence content = s == null ? "" : s;
-                //监听字符输入
-                if (textListener != null) {
-                    textListener.onChanged(content);
-                }
-
                 //监听是否为空
                 if (emptyListener != null) {
                     if (TextUtils.isEmpty(content)) {
@@ -167,6 +162,10 @@ public class EasyEditText extends AppCompatEditText {
 
             @Override
             public void afterTextChanged(Editable s) {
+                //监听字符输入
+                if (textListener != null) {
+                    textListener.onChanged(s.toString(), s.toString().length());
+                }
                 if (isShowClearButton) {
                     setClearButton();
                 }
@@ -245,7 +244,11 @@ public class EasyEditText extends AppCompatEditText {
 
 
     public interface OnTextChangeListener {
-        void onChanged(CharSequence content);
+        /**
+         * @param content:文本内容
+         * @param count:当前的文本长度
+         */
+        void onChanged(@NonNull CharSequence content, int count);
     }
 
     /**
@@ -253,6 +256,7 @@ public class EasyEditText extends AppCompatEditText {
      */
     public void setTextChangeListener(OnTextChangeListener listener) {
         textListener = listener;
+        setTextWatcher();
     }
 
     public interface OnMaxCharactersListener {
@@ -260,7 +264,7 @@ public class EasyEditText extends AppCompatEditText {
     }
 
     public void setMaxCharsListener(OnMaxCharactersListener listener) {
-        Log.e("Tag","设置最大值监听");
+        Log.d("EasyTag", "设置最大值监听");
         maxListener = listener;
     }
 
@@ -312,7 +316,6 @@ public class EasyEditText extends AppCompatEditText {
     }
 
     public void setMaxCharacters(int maxCharacters) {
-        Log.e("Tag", "setMaxCharacters");
         if (this.maxCharacters == maxCharacters) {
             return;
         }
@@ -340,12 +343,16 @@ public class EasyEditText extends AppCompatEditText {
     }
 
     public void setShowVisibilityToggle(boolean showVisibilityToggle) {
+        if (isShowVisibilityToggle == showVisibilityToggle) {
+            return;
+        }
         isShowVisibilityToggle = showVisibilityToggle;
         if (isShowClearButton) {
             return;
         }
         if (isShowVisibilityToggle && !hasRightDrawable()) {
-            initContentToggle();
+            Log.d(TAG,"setVisibilityDrawable");
+            setVisibilityDrawable();
         } else {
             removeDrawable();
         }

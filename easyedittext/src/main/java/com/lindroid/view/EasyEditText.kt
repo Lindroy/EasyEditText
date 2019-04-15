@@ -21,7 +21,8 @@ import android.view.inputmethod.EditorInfo
  * @function 自定义EditText
  * @Description
  */
-const val TAG = "Tag"
+const val TAG = "EasyTag"
+
 
 class EasyEditText : AppCompatEditText {
 
