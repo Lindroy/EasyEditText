@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".JavaActivity">
 
-    <com.lindroid.view.EasyEditText
+    <com.lindroid.widget.EasyEditText
         android:id="@+id/editText"
         android:inputType="textVisiblePassword"
         android:layout_width="match_parent"

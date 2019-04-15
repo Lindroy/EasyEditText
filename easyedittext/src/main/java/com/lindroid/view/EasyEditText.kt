@@ -55,7 +55,7 @@ class EasyEditText : AppCompatEditText {
     var maxCharacters = -1
         private set(value) {
             field = value
-            if (field != -1) {
+            if (field > 0) {
                 setTextWatcher()
             }
         }
@@ -124,7 +124,7 @@ class EasyEditText : AppCompatEditText {
         typedArray?.let {
             //            maxToastText = it.getString(R.styleable.EasyEditText_maxToastText) ?: ""
             isShowVisibilityToggle =
-                    it.getBoolean(R.styleable.EasyEditText_showVisibilityToggle, isShowVisibilityToggle)
+                it.getBoolean(R.styleable.EasyEditText_showVisibilityToggle, isShowVisibilityToggle)
             isShowClearButton = it.getBoolean(R.styleable.EasyEditText_showClearButton, isShowClearButton)
             maxCharacters = it.getInt(R.styleable.EasyEditText_maxCharacters, maxCharacters)
             clearIcon = it.getResourceId(R.styleable.EasyEditText_clearContentIcon, clearIcon)
@@ -226,7 +226,7 @@ class EasyEditText : AppCompatEditText {
     }
 
     /**
-     * 绘制设置密码是否可见的图标
+     * 切换内容是否可见的图标
      */
     private fun setPwdDrawable() {
         val ivPwd = when (isDisplayContent) {
