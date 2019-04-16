@@ -7,6 +7,7 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_sample.*
 
 private const val TAG = "EasyTag"
+
 class SampleActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +23,7 @@ class SampleActivity : AppCompatActivity() {
                 Log.d(TAG, "输入框不为空")
             }
         }
-        etWatcher.setTextChangeListener { content, count ->
+        etWatcher.setOnContentChangeListener { content, count ->
             Log.d(TAG, "content:$content,count=$count")
         }
 

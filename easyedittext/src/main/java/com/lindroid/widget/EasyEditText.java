@@ -17,7 +17,6 @@ import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.inputmethod.EditorInfo;
-
 import com.lindroid.view.R;
 
 /**
@@ -65,7 +64,13 @@ public class EasyEditText extends AppCompatEditText {
 
     private TextWatcher textWatcher = null;
 
-    private OnTextChangeListener textListener = null;
+    private OnContentChangeListener contentListener = null;
+
+    private BeforeTextChangeListener beforeListener = null;
+
+    private OnTextChangeListener changeListener = null;
+
+    private AfterTextChangeListener afterListener = null;
 
     private OnMaxCharactersListener maxListener = null;
 
@@ -133,12 +138,17 @@ public class EasyEditText extends AppCompatEditText {
         textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                if (beforeListener != null) {
+                    beforeListener.onBefore(s == null ? "" : s, start, count, after);
+                }
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 CharSequence content = s == null ? "" : s;
+                if (changeListener != null) {
+                    changeListener.onChange(content, start, before, count);
+                }
                 //监听是否为空
                 if (emptyListener != null) {
                     if (TextUtils.isEmpty(content)) {
@@ -166,9 +176,12 @@ public class EasyEditText extends AppCompatEditText {
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (afterListener != null) {
+                    afterListener.onAfter(s);
+                }
                 //监听字符输入
-                if (textListener != null) {
-                    textListener.onChanged(s.toString(), s.toString().length());
+                if (contentListener != null) {
+                    contentListener.onChanged(s.toString(), s.toString().length());
                 }
                 if (isShowClearButton) {
                     setClearButton();
@@ -215,7 +228,6 @@ public class EasyEditText extends AppCompatEditText {
             setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(getContext(), clearIcon), null);
         } else if (length() <= 0 && hasRightDrawable()) {
             setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-
         }
     }
 
@@ -251,47 +263,6 @@ public class EasyEditText extends AppCompatEditText {
      */
     private void removeDrawable() {
         setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-    }
-
-    public interface OnTextChangeListener {
-        /**
-         * @param content:文本内容
-         * @param count:当前的文本长度
-         */
-        void onChanged(@NonNull CharSequence content, int count);
-    }
-
-    /**
-     * 设置文本改变监听事件
-     */
-    public void setTextChangeListener(OnTextChangeListener listener) {
-        textListener = listener;
-        setTextWatcher();
-    }
-
-    public interface OnMaxCharactersListener {
-        void onMaxChars(int maxChars);
-    }
-
-    /**
-     * 设置最大字符数监听事件
-     */
-    public void setMaxCharsListener(OnMaxCharactersListener listener) {
-        maxListener = listener;
-    }
-
-    public interface OnEmptyChangeListener {
-        /**
-         * @param isEmpty: 输入框是否为空
-         */
-        void onEmpty(boolean isEmpty);
-    }
-
-    /**
-     * 设置内容是否为空的的监听事件
-     */
-    public void setEmptyChangeListener(OnEmptyChangeListener listener) {
-        emptyListener = listener;
     }
 
     public int getClearIcon() {
@@ -398,10 +369,111 @@ public class EasyEditText extends AppCompatEditText {
         }
     }
 
+
+    /**
+     * 文本改变前的监听接口
+     */
+    public interface BeforeTextChangeListener {
+        /**
+         * @param s:改变前的字符
+         * @param start:即将修改的位置
+         * @param count:即将被修改的文字长度，新增则为0
+         * @param after:被修改的文字长度，删除则为0
+         */
+        void onBefore(@NonNull CharSequence s, int start, int count, int after);
+    }
+
+    /**
+     * 设置文本改变前的监听事件
+     */
+    public void setBeforeTextChangeListener(BeforeTextChangeListener listener) {
+        beforeListener = listener;
+        setTextWatcher();
+    }
+
+    /**
+     * 文本改变时的监听接口
+     */
+    public interface OnTextChangeListener {
+        /**
+         * @param s:文本内容
+         * @param start:有变动的字符序号
+         * @param before:变动的字符长度，新增的话则为0
+         * @param count:添加的字符长度，删除的话则为0
+         */
+        void onChange(@NonNull CharSequence s, int start, int before, int count);
+    }
+
+    /**
+     * 设置文本改变监听事件
+     */
+    public void setOnTextChangeListener(OnTextChangeListener listener) {
+        changeListener = listener;
+        setTextWatcher();
+    }
+
+    /**
+     * 文本改变后的监听接口
+     */
+    public interface AfterTextChangeListener {
+        void onAfter(Editable s);
+    }
+
+    /**
+     * 设置文本改变后的监听
+     */
+    public void setAfterTextChangeListener(AfterTextChangeListener listener) {
+        afterListener = listener;
+    }
+
+    /**
+     * 达到最大输入字数监听接口
+     */
+    public interface OnMaxCharactersListener {
+        void onMaxChars(int maxChars);
+    }
+
+    /**
+     * 设置最大字符数监听事件
+     */
+    public void setMaxCharsListener(OnMaxCharactersListener listener) {
+        maxListener = listener;
+    }
+
+    public interface OnEmptyChangeListener {
+        /**
+         * @param isEmpty: 输入框是否为空
+         */
+        void onEmpty(boolean isEmpty);
+    }
+
+    /**
+     * 设置内容是否为空的的监听事件
+     */
+    public void setEmptyChangeListener(OnEmptyChangeListener listener) {
+        emptyListener = listener;
+    }
+
+    public interface OnContentChangeListener {
+        /**
+         * @param content:文本内容
+         * @param count:当前的文本长度
+         */
+        void onChanged(@NonNull CharSequence content, int count);
+    }
+
+    public void setOnContentChangeListener(OnContentChangeListener listener) {
+        contentListener = listener;
+        setTextWatcher();
+    }
+
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        textListener = null;
+        changeListener = null;
+        beforeListener = null;
+        afterListener = null;
+        contentListener = null;
         maxListener = null;
         emptyListener = null;
     }
