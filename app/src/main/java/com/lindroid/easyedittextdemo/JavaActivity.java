@@ -6,14 +6,17 @@ import android.support.v7.app.AppCompatActivity;
 import com.lindroid.widget.EasyEditText;
 
 public class JavaActivity extends AppCompatActivity {
+    private EasyEditText etWatcher;
+    private EasyEditText etEmpty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_java);
-        EasyEditText editText = findViewById(R.id.editText);
-        editText.setDisplayIcon(R.drawable.ic_open);
-        editText.setHideIcon(R.drawable.ic_close);
+        setContentView(R.layout.activity_sample);
+        etWatcher = findViewById(R.id.etWatcher);
+        etEmpty = findViewById(R.id.etEmpty);
+
+
 
     }
 }

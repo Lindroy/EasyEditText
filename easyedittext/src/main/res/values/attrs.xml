@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="EasyEditText">
-        <!--<attr name="maxToastText" format="string"/>-->
         <attr name="maxCharacters" format="integer"/>
         <attr name="showClearButton" format="boolean" />
         <attr name="showVisibilityToggle" format="boolean" />

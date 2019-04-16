@@ -76,6 +76,22 @@
             android:hint="@string/hint_input"
             android:inputType="textPassword"
             />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="自定义明暗文图标" />
+
+        <com.lindroid.widget.EasyEditText
+            app:hideContentIcon="@drawable/ic_close"
+            app:displayContentIcon="@drawable/ic_open"
+            app:showVisibilityToggle="true"
+            android:id="@+id/etCustomPwd"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="@string/hint_input"
+            android:inputType="textPassword"
+            />
     </LinearLayout>
 
 

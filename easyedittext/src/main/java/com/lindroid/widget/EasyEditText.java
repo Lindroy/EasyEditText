@@ -28,12 +28,18 @@ import com.lindroid.view.R;
  */
 public class EasyEditText extends AppCompatEditText {
     private String TAG = "EasyTag";
+    /**
+     * 一键清空按钮图片Id
+     */
     private int clearIcon = R.drawable.ic_clear;
-
+    /**
+     * 内容显示为明文的图片Id
+     */
     private int displayIcon = R.drawable.ic_content_display;
-
+    /**
+     * 内容显示为暗文的图片Id
+     */
     private int hideIcon = R.drawable.ic_content_hide;
-
     /**
      * 最大输入字符数，小于或等于0表示不做限制
      */
@@ -80,7 +86,7 @@ public class EasyEditText extends AppCompatEditText {
         clearIcon = ta.getResourceId(R.styleable.EasyEditText_clearContentIcon, clearIcon);
         displayIcon = ta.getResourceId(R.styleable.EasyEditText_displayContentIcon, displayIcon);
         hideIcon = ta.getResourceId(R.styleable.EasyEditText_hideContentIcon, hideIcon);
-        setShowClearButton( ta.getBoolean(R.styleable.EasyEditText_showClearButton, isShowClearButton));
+        setShowClearButton(ta.getBoolean(R.styleable.EasyEditText_showClearButton, isShowClearButton));
         isShowVisibilityToggle =
                 ta.getBoolean(R.styleable.EasyEditText_showVisibilityToggle, isShowVisibilityToggle);
         setMaxCharacters(ta.getInt(R.styleable.EasyEditText_maxCharacters, maxCharacters));
@@ -127,6 +133,7 @@ public class EasyEditText extends AppCompatEditText {
         textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
 
             @Override
@@ -201,6 +208,7 @@ public class EasyEditText extends AppCompatEditText {
 
     /**
      * 设置一键清除按钮
+     * 输入框内容为空时隐藏一键清空按钮
      */
     private void setClearButton() {
         if (length() > 0 && !hasRightDrawable()) {
@@ -224,6 +232,9 @@ public class EasyEditText extends AppCompatEditText {
         setCompoundDrawablesWithIntrinsicBounds(null, null, ivVisibility, null);
     }
 
+    /**
+     * 获取右侧的图标
+     */
     private Drawable getRightDrawable() {
         return getCompoundDrawables()[2];
     }
@@ -235,10 +246,12 @@ public class EasyEditText extends AppCompatEditText {
         return getRightDrawable() != null;
     }
 
+    /**
+     * 移除右侧所有图标
+     */
     private void removeDrawable() {
         setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
     }
-
 
     public interface OnTextChangeListener {
         /**
@@ -260,48 +273,64 @@ public class EasyEditText extends AppCompatEditText {
         void onMaxChars(int maxChars);
     }
 
+    /**
+     * 设置最大字符数监听事件
+     */
     public void setMaxCharsListener(OnMaxCharactersListener listener) {
         maxListener = listener;
     }
 
     public interface OnEmptyChangeListener {
+        /**
+         * @param isEmpty: 输入框是否为空
+         */
         void onEmpty(boolean isEmpty);
     }
 
+    /**
+     * 设置内容是否为空的的监听事件
+     */
     public void setEmptyChangeListener(OnEmptyChangeListener listener) {
         emptyListener = listener;
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        textListener = null;
-        maxListener = null;
-        emptyListener = null;
     }
 
     public int getClearIcon() {
         return clearIcon;
     }
 
+    /**
+     * 设置一键清空图标Id
+     */
     public void setClearIcon(@DrawableRes int clearIcon) {
         this.clearIcon = clearIcon;
         setTextWatcher();
     }
 
+    /**
+     * 获取明文按钮图标资源Id
+     */
     public int getDisplayIcon() {
         return displayIcon;
     }
 
+    /**
+     * 设置明文按钮图标资源Id
+     */
     public void setDisplayIcon(@DrawableRes int displayIcon) {
         this.displayIcon = displayIcon;
         initContentToggle();
     }
 
+    /**
+     * 获取暗文按钮图标资源Id
+     */
     public int getHideIcon() {
         return hideIcon;
     }
 
+    /**
+     * 设置暗文按钮图标资源Id
+     */
     public void setHideIcon(@DrawableRes int hideIcon) {
         this.hideIcon = hideIcon;
         initContentToggle();
@@ -311,6 +340,9 @@ public class EasyEditText extends AppCompatEditText {
         return maxCharacters;
     }
 
+    /**
+     * 设置最大输入字符数
+     */
     public void setMaxCharacters(int maxCharacters) {
         if (this.maxCharacters == maxCharacters) {
             return;
@@ -325,6 +357,11 @@ public class EasyEditText extends AppCompatEditText {
         return isShowClearButton;
     }
 
+    /**
+     * 设置是否显示一键清空按钮
+     *
+     * @param showClearButton:true时则显示
+     */
     public void setShowClearButton(boolean showClearButton) {
         if (isShowClearButton == showClearButton) {
             return;
@@ -341,6 +378,14 @@ public class EasyEditText extends AppCompatEditText {
         return isShowVisibilityToggle;
     }
 
+    /**
+     * 是否显示明暗文切换按钮
+     * 需要满足两个前提：
+     * 1、输入类型为密码类型；
+     * 2、没有显示一键清空按钮。
+     *
+     * @param showVisibilityToggle:true时显示按钮
+     */
     public void setShowVisibilityToggle(boolean showVisibilityToggle) {
         if (isShowVisibilityToggle == showVisibilityToggle || isShowClearButton) {
             return;
@@ -351,5 +396,13 @@ public class EasyEditText extends AppCompatEditText {
         } else {
             removeDrawable();
         }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        textListener = null;
+        maxListener = null;
+        emptyListener = null;
     }
 }

@@ -26,5 +26,7 @@ class SampleActivity : AppCompatActivity() {
             Log.d(TAG, "content:$content,count=$count")
         }
 
+//        etCustomPwd.hideIcon = R.drawable.ic_close
+//        etCustomPwd.displayIcon = R.drawable.ic_open
     }
 }
