@@ -156,8 +156,6 @@ public class EasyEditText extends AppCompatEditText {
                         maxListener.onMaxChars(maxCharacters);
                     }
                 }
-
-
             }
 
             @Override
@@ -206,9 +204,9 @@ public class EasyEditText extends AppCompatEditText {
      * 设置一键清除按钮
      */
     private void setClearButton() {
-        if (length() > 0 && hasRightDrawable()) {
+        if (length() > 0 && !hasRightDrawable()) {
             setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(getContext(), clearIcon), null);
-        } else if (length() <= 0 && !hasRightDrawable()) {
+        } else if (length() <= 0 && hasRightDrawable()) {
             setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
 
         }
@@ -235,7 +233,7 @@ public class EasyEditText extends AppCompatEditText {
      * 右侧是否有图标
      */
     private boolean hasRightDrawable() {
-        return getRightDrawable() == null;
+        return getRightDrawable() != null;
     }
 
     private void removeDrawable() {
@@ -264,7 +262,6 @@ public class EasyEditText extends AppCompatEditText {
     }
 
     public void setMaxCharsListener(OnMaxCharactersListener listener) {
-        Log.d("EasyTag", "设置最大值监听");
         maxListener = listener;
     }
 
@@ -343,15 +340,11 @@ public class EasyEditText extends AppCompatEditText {
     }
 
     public void setShowVisibilityToggle(boolean showVisibilityToggle) {
-        if (isShowVisibilityToggle == showVisibilityToggle) {
+        if (isShowVisibilityToggle == showVisibilityToggle || isShowClearButton) {
             return;
         }
         isShowVisibilityToggle = showVisibilityToggle;
-        if (isShowClearButton) {
-            return;
-        }
         if (isShowVisibilityToggle && !hasRightDrawable()) {
-            Log.d(TAG,"setVisibilityDrawable");
             setVisibilityDrawable();
         } else {
             removeDrawable();

@@ -25,6 +25,6 @@ class SampleActivity : AppCompatActivity() {
         etWatcher.setTextChangeListener { content, count ->
             Log.d(TAG, "content:$content,count=$count")
         }
-        etPwd.isShowVisibilityToggle = true
+
     }
 }

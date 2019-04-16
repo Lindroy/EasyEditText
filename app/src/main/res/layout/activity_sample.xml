@@ -50,6 +50,7 @@
         android:text="密码明暗文切换" />
 
     <com.lindroid.widget.EasyEditText
+        app:showVisibilityToggle="true"
         android:id="@+id/etPwd"
         android:layout_width="match_parent"
         android:layout_height="50dp"
