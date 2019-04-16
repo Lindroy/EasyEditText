@@ -15,7 +15,6 @@ import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.inputmethod.EditorInfo;
 
@@ -81,7 +80,7 @@ public class EasyEditText extends AppCompatEditText {
         clearIcon = ta.getResourceId(R.styleable.EasyEditText_clearContentIcon, clearIcon);
         displayIcon = ta.getResourceId(R.styleable.EasyEditText_displayContentIcon, displayIcon);
         hideIcon = ta.getResourceId(R.styleable.EasyEditText_hideContentIcon, hideIcon);
-        isShowClearButton = ta.getBoolean(R.styleable.EasyEditText_showClearButton, isShowClearButton);
+        setShowClearButton( ta.getBoolean(R.styleable.EasyEditText_showClearButton, isShowClearButton));
         isShowVisibilityToggle =
                 ta.getBoolean(R.styleable.EasyEditText_showVisibilityToggle, isShowVisibilityToggle);
         setMaxCharacters(ta.getInt(R.styleable.EasyEditText_maxCharacters, maxCharacters));
@@ -327,8 +326,11 @@ public class EasyEditText extends AppCompatEditText {
     }
 
     public void setShowClearButton(boolean showClearButton) {
+        if (isShowClearButton == showClearButton) {
+            return;
+        }
         isShowClearButton = showClearButton;
-        if (isShowVisibilityToggle) {
+        if (isShowClearButton) {
             setTextWatcher();
         } else {
             removeDrawable();
