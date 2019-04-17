@@ -10,9 +10,9 @@
         </attr>-->
         <attr name="showMaxCharsAlertToast" format="boolean" />
         <attr name="showClearButton" format="boolean" />
-        <attr name="showVisibilityToggle" format="boolean" />
+        <attr name="showPlainCipherToggle" format="boolean" />
         <attr name="clearContentIcon" format="reference" />
-        <attr name="displayContentIcon" format="reference" />
-        <attr name="hideContentIcon" format="reference" />
+        <attr name="plainTextIcon" format="reference" />
+        <attr name="cipherTextIcon" format="reference" />
     </declare-styleable>
 </resources>

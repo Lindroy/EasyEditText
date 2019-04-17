@@ -37,11 +37,11 @@ public class EasyEditText extends AppCompatEditText {
     /**
      * 内容显示为明文的图片Id
      */
-    private int displayIcon = R.drawable.ic_content_display;
+    private int plainTextIcon = R.drawable.ic_content_display;
     /**
      * 内容显示为暗文的图片Id
      */
-    private int hideIcon = R.drawable.ic_content_hide;
+    private int cipherTextIcon = R.drawable.ic_content_hide;
     /**
      * 最大输入字符数，小于或等于0表示不做限制
      */
@@ -68,7 +68,7 @@ public class EasyEditText extends AppCompatEditText {
     /**
      * 是否显示设置密码可见的按钮，前提是不显示删除按钮
      */
-    private boolean isShowVisibilityToggle;
+    private boolean isShowPlainCipherToggle;
     /**
      * 是否显示明文
      */
@@ -107,11 +107,11 @@ public class EasyEditText extends AppCompatEditText {
         checkInputType();
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.EasyEditText, defStyleAttr, 0);
         clearIcon = ta.getResourceId(R.styleable.EasyEditText_clearContentIcon, clearIcon);
-        displayIcon = ta.getResourceId(R.styleable.EasyEditText_displayContentIcon, displayIcon);
-        hideIcon = ta.getResourceId(R.styleable.EasyEditText_hideContentIcon, hideIcon);
+        plainTextIcon = ta.getResourceId(R.styleable.EasyEditText_plainTextIcon, plainTextIcon);
+        cipherTextIcon = ta.getResourceId(R.styleable.EasyEditText_cipherTextIcon, cipherTextIcon);
         setShowClearButton(ta.getBoolean(R.styleable.EasyEditText_showClearButton, false));
-        isShowVisibilityToggle =
-                ta.getBoolean(R.styleable.EasyEditText_showVisibilityToggle, false);
+        isShowPlainCipherToggle =
+                ta.getBoolean(R.styleable.EasyEditText_showPlainCipherToggle, false);
         setMaxCharacters(ta.getInt(R.styleable.EasyEditText_maxCharacters, maxCharacters));
         maxCharsAlert = checkNull(ta.getString(R.styleable.EasyEditText_maxCharsAlert));
         maxCharsAlertWithCount = checkNull(ta.getString(R.styleable.EasyEditText_maxCharsAlert));
@@ -154,7 +154,7 @@ public class EasyEditText extends AppCompatEditText {
     }
 
     private void initContentToggle() {
-        if (isPwdType && !isShowClearButton && isShowVisibilityToggle) {
+        if (isPwdType && !isShowClearButton && isShowPlainCipherToggle) {
             setVisibilityDrawable();
         }
     }
@@ -243,7 +243,7 @@ public class EasyEditText extends AppCompatEditText {
             if (rect.contains(eventX, eventY)) {
                 if (isShowClearButton) {
                     setText("");
-                } else if (isShowVisibilityToggle) {
+                } else if (isShowPlainCipherToggle) {
                     isDisplayContent = !isDisplayContent;
                     if (isDisplayContent) {
                         setTransformationMethod(HideReturnsTransformationMethod.getInstance());
@@ -276,9 +276,9 @@ public class EasyEditText extends AppCompatEditText {
     private void setVisibilityDrawable() {
         Drawable ivVisibility;
         if (isDisplayContent) {
-            ivVisibility = ContextCompat.getDrawable(getContext(), displayIcon);
+            ivVisibility = ContextCompat.getDrawable(getContext(), plainTextIcon);
         } else {
-            ivVisibility = ContextCompat.getDrawable(getContext(), hideIcon);
+            ivVisibility = ContextCompat.getDrawable(getContext(), cipherTextIcon);
         }
         setCompoundDrawablesWithIntrinsicBounds(null, null, ivVisibility, null);
     }
@@ -319,30 +319,30 @@ public class EasyEditText extends AppCompatEditText {
     /**
      * 获取明文按钮图标资源Id
      */
-    public int getDisplayIcon() {
-        return displayIcon;
+    public int getPlainTextIcon() {
+        return plainTextIcon;
     }
 
     /**
      * 设置明文按钮图标资源Id
      */
-    public void setDisplayIcon(@DrawableRes int displayIcon) {
-        this.displayIcon = displayIcon;
+    public void setPlainTextIcon(@DrawableRes int plainTextIcon) {
+        this.plainTextIcon = plainTextIcon;
         initContentToggle();
     }
 
     /**
      * 获取暗文按钮图标资源Id
      */
-    public int getHideIcon() {
-        return hideIcon;
+    public int getCipherTextIcon() {
+        return cipherTextIcon;
     }
 
     /**
      * 设置暗文按钮图标资源Id
      */
-    public void setHideIcon(@DrawableRes int hideIcon) {
-        this.hideIcon = hideIcon;
+    public void setCipherTextIcon(@DrawableRes int cipherTextIcon) {
+        this.cipherTextIcon = cipherTextIcon;
         initContentToggle();
     }
 
@@ -409,8 +409,8 @@ public class EasyEditText extends AppCompatEditText {
         this.showMaxCharsAlertToast = showToast;
     }
 
-    public boolean isShowVisibilityToggle() {
-        return isShowVisibilityToggle;
+    public boolean isShowPlainCipherToggle() {
+        return isShowPlainCipherToggle;
     }
 
     /**
@@ -419,14 +419,14 @@ public class EasyEditText extends AppCompatEditText {
      * 1、输入类型为密码类型；
      * 2、没有显示一键清空按钮。
      *
-     * @param showVisibilityToggle:true时显示按钮
+     * @param showPlainCipherToggle:true时显示按钮
      */
-    public void setShowVisibilityToggle(boolean showVisibilityToggle) {
-        if (isShowVisibilityToggle == showVisibilityToggle || isShowClearButton) {
+    public void setShowPlainCipherToggle(boolean showPlainCipherToggle) {
+        if (isShowPlainCipherToggle == showPlainCipherToggle || isShowClearButton) {
             return;
         }
-        isShowVisibilityToggle = showVisibilityToggle;
-        if (isShowVisibilityToggle && !hasRightDrawable()) {
+        isShowPlainCipherToggle = showPlainCipherToggle;
+        if (isShowPlainCipherToggle && !hasRightDrawable()) {
             setVisibilityDrawable();
         } else {
             removeDrawable();

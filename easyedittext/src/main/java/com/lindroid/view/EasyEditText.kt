@@ -125,10 +125,10 @@ class EasyEditText @JvmOverloads constructor(context: Context, attrs: AttributeS
         checkInputType()
         val ta = context.obtainStyledAttributes(attrs, R.styleable.EasyEditText, defStyleAttr, 0)
         clearIcon = ta.getResourceId(R.styleable.EasyEditText_clearContentIcon, clearIcon)
-        displayIcon = ta.getResourceId(R.styleable.EasyEditText_displayContentIcon, displayIcon)
-        hideIcon = ta.getResourceId(R.styleable.EasyEditText_hideContentIcon, hideIcon)
+        displayIcon = ta.getResourceId(R.styleable.EasyEditText_plainTextIcon, displayIcon)
+        hideIcon = ta.getResourceId(R.styleable.EasyEditText_cipherTextIcon, hideIcon)
         isShowClearButton = ta.getBoolean(R.styleable.EasyEditText_showClearButton, false)
-        isShowVisibilityToggle = ta.getBoolean(R.styleable.EasyEditText_showVisibilityToggle, false)
+        isShowVisibilityToggle = ta.getBoolean(R.styleable.EasyEditText_showPlainCipherToggle, false)
         maxCharacters = ta.getInt(R.styleable.EasyEditText_maxCharacters, this.maxCharacters)
         maxCharsAlert = ta.getString(R.styleable.EasyEditText_maxCharsAlert)
         maxCharsAlertWithCount = ta.getString(R.styleable.EasyEditText_maxCharsAlertWithCount)
@@ -347,13 +347,13 @@ class EasyEditText @JvmOverloads constructor(context: Context, attrs: AttributeS
      * 1、输入类型为密码类型；
      * 2、没有显示一键清空按钮。
      *
-     * @param showVisibilityToggle:true时显示按钮
+     * @param showPlainCipherToggle:true时显示按钮
      */
-    fun setShowVisibilityToggle(showVisibilityToggle: Boolean) {
-        if (isShowVisibilityToggle == showVisibilityToggle || this.isShowClearButton) {
+    fun setShowVisibilityToggle(showPlainCipherToggle: Boolean) {
+        if (isShowVisibilityToggle == showPlainCipherToggle || this.isShowClearButton) {
             return
         }
-        isShowVisibilityToggle = showVisibilityToggle
+        isShowVisibilityToggle = showPlainCipherToggle
         if (isShowVisibilityToggle && !hasRightDrawable()) {
             setVisibilityDrawable()
         } else {
