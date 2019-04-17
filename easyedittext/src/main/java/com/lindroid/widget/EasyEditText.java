@@ -18,6 +18,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Toast;
 
 import com.lindroid.view.R;
 
@@ -49,11 +50,12 @@ public class EasyEditText extends AppCompatEditText {
      * 超出最大字符输入数时的提示文字
      */
     @NonNull()
-    private String maxCharsAlert = "";
+    private String maxCharsAlert;
     /**
      * 超出最大字符输入数时的提示文字，包含字数
      */
-    private String maxCharsAlertWithCount = "";
+    @NonNull
+    private String maxCharsAlertWithCount;
     /**
      * 超出最大字符输入数时是否弹出Toast
      */
@@ -111,15 +113,21 @@ public class EasyEditText extends AppCompatEditText {
         isShowVisibilityToggle =
                 ta.getBoolean(R.styleable.EasyEditText_showVisibilityToggle, false);
         setMaxCharacters(ta.getInt(R.styleable.EasyEditText_maxCharacters, maxCharacters));
-//        maxCharsAlert = Objects.requireNonNull(ta.getString(R.styleable.EasyEditText_maxCharsAlert));
-        maxCharsAlertWithCount = ta.getString(R.styleable.EasyEditText_maxCharsAlertWithCount);
+        maxCharsAlert = checkNull(ta.getString(R.styleable.EasyEditText_maxCharsAlert));
+        maxCharsAlertWithCount = checkNull(ta.getString(R.styleable.EasyEditText_maxCharsAlert));
         showMaxCharsAlertToast = ta.getBoolean(R.styleable.EasyEditText_showMaxCharsAlertToast, false);
         ta.recycle();
         if (getText() != null) {
             isEmpty = getText().toString().isEmpty();
         }
         initContentToggle();
+    }
 
+    private String checkNull(String string) {
+        if (string == null) {
+            return "";
+        }
+        return string;
     }
 
     /**
@@ -188,6 +196,17 @@ public class EasyEditText extends AppCompatEditText {
                     //光标移至最末端
                     assert getText() != null;
                     setSelection(getText().length());
+                    String alertText;
+                    if (!maxCharsAlertWithCount.isEmpty()) {
+                        alertText = String.format(maxCharsAlertWithCount, maxCharacters);
+                    } else if (!maxCharsAlert.isEmpty()) {
+                        alertText = maxCharsAlert;
+                    } else {
+                        alertText = String.format(getContext().getString(R.string.eet_max_chars_alert_with_count), maxCharacters);
+                    }
+                    if (showMaxCharsAlertToast) {
+                        Toast.makeText(getContext(), alertText, Toast.LENGTH_SHORT).show();
+                    }
                     if (maxListener != null) {
                         maxListener.onMaxChars(maxCharacters);
                     }
@@ -370,7 +389,7 @@ public class EasyEditText extends AppCompatEditText {
     }
 
     public void setMaxCharsAlert(@NonNull String alert) {
-        Log.e(TAG,"alert="+alert);
+        Log.e(TAG, "alert=" + alert);
         maxCharsAlert = alert;
     }
 

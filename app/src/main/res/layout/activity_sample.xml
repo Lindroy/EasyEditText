@@ -4,14 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:fillViewport="true"
+    android:orientation="vertical"
     tools:context=".SampleActivity">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -23,6 +24,18 @@
             android:layout_height="50dp"
             android:hint="最大输入字数为5"
             app:maxCharacters="5" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="限定最长字符并弹出默认Toast" />
+
+        <com.lindroid.widget.EasyEditText
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="最大输入字数为5"
+            app:maxCharacters="5"
+            app:showMaxCharsAlertToast="true" />
 
         <TextView
             android:layout_width="match_parent"
@@ -54,13 +67,12 @@
             android:text="密码明暗文切换" />
 
         <com.lindroid.widget.EasyEditText
-            app:showVisibilityToggle="true"
             android:id="@+id/etPwd"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:hint="@string/hint_input"
             android:inputType="textPassword"
-            />
+            app:showVisibilityToggle="true" />
 
         <TextView
             android:layout_width="match_parent"
@@ -69,13 +81,12 @@
 
         <com.lindroid.widget.EasyEditText
             android:id="@+id/etCustomClear"
-            app:showClearButton="true"
-            app:clearContentIcon="@drawable/ic_delete"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:hint="@string/hint_input"
             android:inputType="textPassword"
-            />
+            app:clearContentIcon="@drawable/ic_delete"
+            app:showClearButton="true" />
 
         <TextView
             android:layout_width="match_parent"
@@ -83,15 +94,14 @@
             android:text="自定义明暗文图标" />
 
         <com.lindroid.widget.EasyEditText
-            app:hideContentIcon="@drawable/ic_close"
-            app:displayContentIcon="@drawable/ic_open"
-            app:showVisibilityToggle="true"
             android:id="@+id/etCustomPwd"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:hint="@string/hint_input"
             android:inputType="textPassword"
-            />
+            app:displayContentIcon="@drawable/ic_open"
+            app:hideContentIcon="@drawable/ic_close"
+            app:showVisibilityToggle="true" />
     </LinearLayout>
 
 
