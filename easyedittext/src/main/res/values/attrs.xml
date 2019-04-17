@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="EasyEditText">
-        <attr name="maxCharacters" format="integer"/>
+        <attr name="maxCharacters" format="integer" />
+        <attr name="maxCharsAlert" format="string" />
+        <attr name="maxCharsAlertWithCount" format="string" />
+       <!-- <attr name="maxCharsAlertTime" format="integer">
+            <flag name="long" value="1"/>
+            <flag name="short" value="0"/>
+        </attr>-->
+        <attr name="showMaxCharsAlertToast" format="boolean" />
         <attr name="showClearButton" format="boolean" />
         <attr name="showVisibilityToggle" format="boolean" />
         <attr name="clearContentIcon" format="reference" />
         <attr name="displayContentIcon" format="reference" />
         <attr name="hideContentIcon" format="reference" />
     </declare-styleable>
-
-
 </resources>

@@ -15,8 +15,10 @@ import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.inputmethod.EditorInfo;
+
 import com.lindroid.view.R;
 
 /**
@@ -44,13 +46,27 @@ public class EasyEditText extends AppCompatEditText {
      */
     private int maxCharacters = -1;
     /**
+     * 超出最大字符输入数时的提示文字
+     */
+    @NonNull()
+    private String maxCharsAlert = "";
+    /**
+     * 超出最大字符输入数时的提示文字，包含字数
+     */
+    private String maxCharsAlertWithCount = "";
+    /**
+     * 超出最大字符输入数时是否弹出Toast
+     */
+    private boolean showMaxCharsAlertToast;
+
+    /**
      * 是否显示清空按钮
      */
     private boolean isShowClearButton = false;
     /**
      * 是否显示设置密码可见的按钮，前提是不显示删除按钮
      */
-    private boolean isShowVisibilityToggle = false;
+    private boolean isShowVisibilityToggle;
     /**
      * 是否显示明文
      */
@@ -91,15 +107,19 @@ public class EasyEditText extends AppCompatEditText {
         clearIcon = ta.getResourceId(R.styleable.EasyEditText_clearContentIcon, clearIcon);
         displayIcon = ta.getResourceId(R.styleable.EasyEditText_displayContentIcon, displayIcon);
         hideIcon = ta.getResourceId(R.styleable.EasyEditText_hideContentIcon, hideIcon);
-        setShowClearButton(ta.getBoolean(R.styleable.EasyEditText_showClearButton, isShowClearButton));
+        setShowClearButton(ta.getBoolean(R.styleable.EasyEditText_showClearButton, false));
         isShowVisibilityToggle =
-                ta.getBoolean(R.styleable.EasyEditText_showVisibilityToggle, isShowVisibilityToggle);
+                ta.getBoolean(R.styleable.EasyEditText_showVisibilityToggle, false);
         setMaxCharacters(ta.getInt(R.styleable.EasyEditText_maxCharacters, maxCharacters));
+//        maxCharsAlert = Objects.requireNonNull(ta.getString(R.styleable.EasyEditText_maxCharsAlert));
+        maxCharsAlertWithCount = ta.getString(R.styleable.EasyEditText_maxCharsAlertWithCount);
+        showMaxCharsAlertToast = ta.getBoolean(R.styleable.EasyEditText_showMaxCharsAlertToast, false);
         ta.recycle();
         if (getText() != null) {
             isEmpty = getText().toString().isEmpty();
         }
         initContentToggle();
+
     }
 
     /**
@@ -343,6 +363,31 @@ public class EasyEditText extends AppCompatEditText {
         } else {
             removeDrawable();
         }
+    }
+
+    public String getMaxCharsAlert() {
+        return maxCharsAlert;
+    }
+
+    public void setMaxCharsAlert(@NonNull String alert) {
+        Log.e(TAG,"alert="+alert);
+        maxCharsAlert = alert;
+    }
+
+    public String getMaxCharsAlertWithCount() {
+        return maxCharsAlertWithCount;
+    }
+
+    public void setMaxCharsAlertWithCount(String alertWithCount) {
+        maxCharsAlertWithCount = alertWithCount;
+    }
+
+    public boolean isShowMaxCharsAlertToast() {
+        return showMaxCharsAlertToast;
+    }
+
+    public void setShowMaxCharsAlertToast(boolean showToast) {
+        this.showMaxCharsAlertToast = showToast;
     }
 
     public boolean isShowVisibilityToggle() {

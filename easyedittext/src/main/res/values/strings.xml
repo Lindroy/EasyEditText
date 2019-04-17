@@ -1,3 +1,3 @@
 <resources>
-    <string name="app_name">EasyEditText</string>
+    <string name="eet_max_chars_alert_with_count">请勿超过%s字</string>
 </resources>

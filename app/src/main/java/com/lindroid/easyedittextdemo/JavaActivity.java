@@ -15,7 +15,7 @@ public class JavaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sample);
         etWatcher = findViewById(R.id.etWatcher);
         etEmpty = findViewById(R.id.etEmpty);
-
+//        etEmpty.setMaxCharsAlert(null);
 
 
     }
