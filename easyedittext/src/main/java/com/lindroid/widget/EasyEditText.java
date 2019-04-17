@@ -440,6 +440,9 @@ public class EasyEditText extends AppCompatEditText {
         maxListener = listener;
     }
 
+    /**
+     * 监听内容是否为空接口
+     */
     public interface OnEmptyChangeListener {
         /**
          * @param isEmpty: 输入框是否为空
@@ -454,6 +457,9 @@ public class EasyEditText extends AppCompatEditText {
         emptyListener = listener;
     }
 
+    /**
+     * 内容变化监听接口
+     */
     public interface OnContentChangeListener {
         /**
          * @param content:文本内容
