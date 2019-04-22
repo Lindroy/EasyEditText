@@ -19,7 +19,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
-
 import com.lindroid.view.R;
 
 /**
@@ -208,7 +207,7 @@ public class EasyEditText extends AppCompatEditText {
                         Toast.makeText(getContext(), alertText, Toast.LENGTH_SHORT).show();
                     }
                     if (maxListener != null) {
-                        maxListener.onMaxChars(maxCharacters);
+                        maxListener.onMaxChars(maxCharacters,alertText);
                     }
                 }
             }
@@ -494,7 +493,11 @@ public class EasyEditText extends AppCompatEditText {
      * 达到最大输入字数监听接口
      */
     public interface OnMaxCharactersListener {
-        void onMaxChars(int maxChars);
+        /**
+         * @param maxChars:最大输入字符数
+         * @param alertText:超过最大输入字符数时的提示文字
+         */
+        void onMaxChars(int maxChars,@NonNull String alertText);
     }
 
     /**

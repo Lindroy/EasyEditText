@@ -13,8 +13,8 @@ class SampleActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sample)
-        etMax.setMaxCharsListener {
-            Toast.makeText(this, "最大字数为$it", Toast.LENGTH_SHORT).show()
+        etMax.setMaxCharsListener { maxChars, alertText ->
+            Toast.makeText(this, "最大字数为$maxChars", Toast.LENGTH_SHORT).show()
         }
         etEmpty.setEmptyChangeListener { isEmpty ->
             if (isEmpty) {
