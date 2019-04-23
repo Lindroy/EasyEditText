@@ -1,4 +1,7 @@
 # EasyEditText
+
+[![](https://jitpack.io/v/Lindroy/EasyEditText.svg)](https://jitpack.io/#Lindroy/EasyEditText)
+
 使用Kotlin编写的多功能EditText。
 
 ## 目录
@@ -20,6 +23,24 @@
 - [x] 输入内容监听事件
 
 ## 使用方法
+
+在工程的build.gradle中添加：
+```
+	allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+```
+
+添加依赖库：
+```
+	dependencies {
+	        implementation 'com.github.Lindroy:EasyEditText:latest-version'
+	}
+```
+**latest-version**请参考标题下方的JitPack小图标。
 
 在xml布局中添加：
 ```xml
