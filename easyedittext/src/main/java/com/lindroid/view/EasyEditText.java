@@ -1,4 +1,4 @@
-package com.lindroid.widget;
+package com.lindroid.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -19,7 +19,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
-import com.lindroid.view.R;
 
 /**
  * @author Lin
@@ -77,6 +76,11 @@ public class EasyEditText extends AppCompatEditText {
      */
     private boolean isPwdType = false;
 
+    /**
+     * 达到最大输入字符数时是否限制输入
+     */
+    private boolean isMaxCharsLimited;
+
     private boolean isEmpty = false;
 
     private TextWatcher textWatcher = null;
@@ -112,6 +116,7 @@ public class EasyEditText extends AppCompatEditText {
         isShowPlainCipherToggle =
                 ta.getBoolean(R.styleable.EasyEditText_showPlainCipherToggle, false);
         setMaxCharacters(ta.getInt(R.styleable.EasyEditText_maxCharacters, maxCharacters));
+        isMaxCharsLimited = ta.getBoolean(R.styleable.EasyEditText_maxCharsLimited, true);
         maxCharsAlert = checkNull(ta.getString(R.styleable.EasyEditText_maxCharsAlert));
         maxCharsAlertWithCount = checkNull(ta.getString(R.styleable.EasyEditText_maxCharsAlert));
         showMaxCharsAlertToast = ta.getBoolean(R.styleable.EasyEditText_showMaxCharsAlertToast, false);
@@ -148,7 +153,6 @@ public class EasyEditText extends AppCompatEditText {
                 isPwdType = false;
                 isDisplayContent = true;
                 break;
-
         }
     }
 
@@ -191,10 +195,12 @@ public class EasyEditText extends AppCompatEditText {
 
                 //监听最大输入字符
                 if (maxCharacters > 0 && content.length() > maxCharacters) {
-                    setText(content.toString().substring(0, maxCharacters));
-                    //光标移至最末端
-                    assert getText() != null;
-                    setSelection(getText().length());
+                    if (isMaxCharsLimited) {
+                        setText(content.toString().substring(0, maxCharacters));
+                        //光标移至最末端
+                        assert getText() != null;
+                        setSelection(getText().length());
+                    }
                     String alertText;
                     if (!maxCharsAlertWithCount.isEmpty()) {
                         alertText = String.format(maxCharsAlertWithCount, maxCharacters);
@@ -207,7 +213,7 @@ public class EasyEditText extends AppCompatEditText {
                         Toast.makeText(getContext(), alertText, Toast.LENGTH_SHORT).show();
                     }
                     if (maxListener != null) {
-                        maxListener.onMaxChars(maxCharacters,alertText);
+                        maxListener.onMaxChars(maxCharacters, alertText);
                     }
                 }
             }
@@ -432,6 +438,13 @@ public class EasyEditText extends AppCompatEditText {
         }
     }
 
+    public boolean isMaxCharsLimited() {
+        return isMaxCharsLimited;
+    }
+
+    public void setMaxCharsLimited(boolean maxCharsLimited) {
+        isMaxCharsLimited = maxCharsLimited;
+    }
 
     /**
      * 文本改变前的监听接口
@@ -497,7 +510,7 @@ public class EasyEditText extends AppCompatEditText {
          * @param maxChars:最大输入字符数
          * @param alertText:超过最大输入字符数时的提示文字
          */
-        void onMaxChars(int maxChars,@NonNull String alertText);
+        void onMaxChars(int maxChars, @NonNull String alertText);
     }
 
     /**

@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:text="限定最长字符" />
 
-        <com.lindroid.widget.EasyEditText
+        <com.lindroid.view.EasyEditText
             android:id="@+id/etMax"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:text="限定最长字符并弹出默认Toast" />
 
-        <com.lindroid.widget.EasyEditText
+        <com.lindroid.view.EasyEditText
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:hint="最大输入字数为5"
@@ -40,9 +40,22 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="达到最大输入数后不限制输入" />
+
+        <com.lindroid.view.EasyEditText
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="最大输入字数为5"
+            app:maxCharacters="5"
+            app:maxCharsLimited="false"
+            app:showMaxCharsAlertToast="true" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="一键清空内容并监听是否为空" />
 
-        <com.lindroid.widget.EasyEditText
+        <com.lindroid.view.EasyEditText
             android:id="@+id/etEmpty"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -54,7 +67,7 @@
             android:layout_height="wrap_content"
             android:text="监听输入的文本" />
 
-        <com.lindroid.widget.EasyEditText
+        <com.lindroid.view.EasyEditText
             android:id="@+id/etWatcher"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -66,7 +79,7 @@
             android:layout_height="wrap_content"
             android:text="密码明暗文切换" />
 
-        <com.lindroid.widget.EasyEditText
+        <com.lindroid.view.EasyEditText
             android:id="@+id/etPwd"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -79,7 +92,7 @@
             android:layout_height="wrap_content"
             android:text="自定义一键清空图标" />
 
-        <com.lindroid.widget.EasyEditText
+        <com.lindroid.view.EasyEditText
             android:id="@+id/etCustomClear"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -93,14 +106,14 @@
             android:layout_height="wrap_content"
             android:text="自定义明暗文图标" />
 
-        <com.lindroid.widget.EasyEditText
+        <com.lindroid.view.EasyEditText
             android:id="@+id/etCustomPwd"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:hint="@string/hint_input"
             android:inputType="textPassword"
-            app:plainTextIcon="@drawable/ic_open"
             app:cipherTextIcon="@drawable/ic_close"
+            app:plainTextIcon="@drawable/ic_open"
             app:showPlainCipherToggle="true" />
     </LinearLayout>
 
