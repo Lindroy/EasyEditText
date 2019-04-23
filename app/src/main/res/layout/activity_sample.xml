@@ -117,5 +117,22 @@
             app:showPlainCipherToggle="true" />
     </LinearLayout>
 
+    <com.lindroid.view.EasyEditText
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="@string/hint_input"
+        android:inputType="textPassword"
+        app:showClearButton="false"
+        app:clearContentIcon="@drawable/ic_eet_clear"
+        app:showPlainCipherToggle="true"
+        app:cipherTextIcon="@drawable/ic_eet_content_cipher"
+        app:plainTextIcon="@drawable/ic_eet_content_plain"
+        app:maxCharacters="140"
+        app:showMaxCharsAlertToast="true"
+        app:maxCharsAlertWithCount="最大输入字数为d%"
+        app:maxCharsAlert="你已超过最大限制字数"
+        app:maxCharsLimited="true" />
+
 
 </android.support.v4.widget.NestedScrollView>

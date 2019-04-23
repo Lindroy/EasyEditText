@@ -31,15 +31,15 @@ public class EasyEditText extends AppCompatEditText {
     /**
      * 一键清空按钮图片Id
      */
-    private int clearIcon = R.drawable.ic_clear;
+    private int clearIcon = R.drawable.ic_eet_clear;
     /**
      * 内容显示为明文的图片Id
      */
-    private int plainTextIcon = R.drawable.ic_content_display;
+    private int plainTextIcon = R.drawable.ic_eet_content_plain;
     /**
      * 内容显示为暗文的图片Id
      */
-    private int cipherTextIcon = R.drawable.ic_content_hide;
+    private int cipherTextIcon = R.drawable.ic_eet_content_cipher;
     /**
      * 最大输入字符数，小于或等于0表示不做限制
      */
@@ -442,6 +442,11 @@ public class EasyEditText extends AppCompatEditText {
         return isMaxCharsLimited;
     }
 
+    /**
+     * 设置达到最大输入字数后是否限制输入
+     *
+     * @param maxCharsLimited:是否限制继续输入
+     */
     public void setMaxCharsLimited(boolean maxCharsLimited) {
         isMaxCharsLimited = maxCharsLimited;
     }
