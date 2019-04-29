@@ -15,7 +15,6 @@ import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
@@ -394,7 +393,6 @@ public class EasyEditText extends AppCompatEditText {
     }
 
     public void setMaxCharsAlert(@NonNull String alert) {
-        Log.e(TAG, "alert=" + alert);
         maxCharsAlert = alert;
     }
 
@@ -540,6 +538,7 @@ public class EasyEditText extends AppCompatEditText {
      */
     public void setEmptyChangeListener(OnEmptyChangeListener listener) {
         emptyListener = listener;
+        setTextWatcher();
     }
 
     /**
