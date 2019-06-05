@@ -4,23 +4,16 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
-
 import com.lindroid.view.EasyEditText;
 
 public class JavaActivity extends AppCompatActivity {
-    private EasyEditText etWatcher;
-    private EasyEditText etEmpty;
-    private EasyEditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sample);
-        etWatcher = findViewById(R.id.etWatcher);
-        etEmpty = findViewById(R.id.etEmpty);
 //        etEmpty.setMaxCharsAlert(null);
-        editText = findViewById(R.id.editText);
-
+        EasyEditText editText = findViewById(R.id.editText);
         /*
           监听输入框内容是否为空
          */

@@ -15,9 +15,11 @@ import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Lin
@@ -80,6 +82,11 @@ public class EasyEditText extends AppCompatEditText {
      */
     private boolean isMaxCharsLimited;
 
+    /**
+     * 达到最大输入字符数时弹出的Toast时长
+     */
+    private int maxCharsAlertDuration = Toast.LENGTH_SHORT;
+
     private boolean isEmpty = false;
 
     private TextWatcher textWatcher = null;
@@ -119,6 +126,8 @@ public class EasyEditText extends AppCompatEditText {
         maxCharsAlert = checkNull(ta.getString(R.styleable.EasyEditText_maxCharsAlert));
         maxCharsAlertWithCount = checkNull(ta.getString(R.styleable.EasyEditText_maxCharsAlert));
         showMaxCharsAlertToast = ta.getBoolean(R.styleable.EasyEditText_showMaxCharsAlertToast, false);
+        maxCharsAlertDuration = ta.getInt(R.styleable.EasyEditText_maxCharsAlertDuration, maxCharsAlertDuration);
+        Log.e("Tag", "maxCharsAlertDuration=" + maxCharsAlertDuration);
         ta.recycle();
         if (getText() != null) {
             isEmpty = getText().toString().isEmpty();
@@ -209,7 +218,7 @@ public class EasyEditText extends AppCompatEditText {
                         alertText = String.format(getContext().getString(R.string.eet_max_chars_alert_with_count), maxCharacters);
                     }
                     if (showMaxCharsAlertToast) {
-                        Toast.makeText(getContext(), alertText, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), alertText, maxCharsAlertDuration).show();
                     }
                     if (maxListener != null) {
                         maxListener.onMaxChars(maxCharacters, alertText);
@@ -350,6 +359,9 @@ public class EasyEditText extends AppCompatEditText {
         initContentToggle();
     }
 
+    /**
+     * 获取限制输入最大字数
+     */
     public int getMaxCharacters() {
         return maxCharacters;
     }
@@ -365,10 +377,6 @@ public class EasyEditText extends AppCompatEditText {
         if (maxCharacters > 0) {
             setTextWatcher();
         }
-    }
-
-    public boolean isShowClearButton() {
-        return isShowClearButton;
     }
 
     /**
@@ -388,32 +396,79 @@ public class EasyEditText extends AppCompatEditText {
         }
     }
 
+    /**
+     * 是否显示一键清空按钮
+     */
+    public boolean isShowClearButton() {
+        return isShowClearButton;
+    }
+
+    /**
+     * 获取达到最大输入字符时的提示文字
+     */
+    @NotNull
     public String getMaxCharsAlert() {
         return maxCharsAlert;
     }
 
+    /**
+     * 设置达到最大输入字符时的提示文字
+     *
+     * @param alert
+     */
     public void setMaxCharsAlert(@NonNull String alert) {
         maxCharsAlert = alert;
     }
 
+    /**
+     * 获取超出最大字符输入数时的提示文字，包含字数
+     */
+    @NotNull
     public String getMaxCharsAlertWithCount() {
         return maxCharsAlertWithCount;
     }
 
-    public void setMaxCharsAlertWithCount(String alertWithCount) {
+    /**
+     * 设置超出最大字符输入数时的提示文字，包含字数
+     *
+     * @param alertWithCount
+     */
+    public void setMaxCharsAlertWithCount(@NonNull String alertWithCount) {
         maxCharsAlertWithCount = alertWithCount;
     }
 
+    /**
+     * 达到最大字数时是否弹出Toast
+     */
     public boolean isShowMaxCharsAlertToast() {
         return showMaxCharsAlertToast;
     }
 
+    /**
+     * 设置达到最大字数时是否弹出Toast
+     * @param showToast
+     */
     public void setShowMaxCharsAlertToast(boolean showToast) {
         this.showMaxCharsAlertToast = showToast;
     }
 
-    public boolean isShowPlainCipherToggle() {
-        return isShowPlainCipherToggle;
+    /**
+     * 达到最大输入字数后弹出Toast的时长
+     */
+    public int getMaxCharsAlertDuration() {
+        return maxCharsAlertDuration;
+    }
+
+    /**
+     * 设置达到最大输入字数后弹出Toast的时长
+     *
+     * @param duration：只能输入Toast.LENGTH_SHORT或Toast.LENGTH_LONG
+     */
+    public void setMaxCharsAlertDuration(/*@IntRange(from = Toast.LENGTH_SHORT, to = Toast.LENGTH_LONG)*/ int duration) {
+        if (duration != Toast.LENGTH_SHORT && duration != Toast.LENGTH_LONG) {
+            duration = Toast.LENGTH_SHORT;
+        }
+        this.maxCharsAlertDuration = duration;
     }
 
     /**
@@ -436,8 +491,11 @@ public class EasyEditText extends AppCompatEditText {
         }
     }
 
-    public boolean isMaxCharsLimited() {
-        return isMaxCharsLimited;
+    /**
+     * 当前是否显示明暗文切换按钮
+     */
+    public boolean isShowPlainCipherToggle() {
+        return isShowPlainCipherToggle;
     }
 
     /**
@@ -448,6 +506,14 @@ public class EasyEditText extends AppCompatEditText {
     public void setMaxCharsLimited(boolean maxCharsLimited) {
         isMaxCharsLimited = maxCharsLimited;
     }
+
+    /**
+     * 当前达到最大输入字数后是否限制输入
+     */
+    public boolean isMaxCharsLimited() {
+        return isMaxCharsLimited;
+    }
+
 
     /**
      * 文本改变前的监听接口

@@ -3,18 +3,18 @@
     <declare-styleable name="EasyEditText">
 
         <attr name="showClearButton" format="boolean"/>
-        <attr name="clearContentIcon" format="reference" />
+        <attr name="clearContentIcon" format="reference"/>
         <attr name="showPlainCipherToggle" format="boolean"/>
         <attr name="plainTextIcon" format="reference"/>
         <attr name="cipherTextIcon" format="reference"/>
-        <attr name="maxCharacters" format="integer" />
-        <attr name="showMaxCharsAlertToast" format="boolean" />
-        <attr name="maxCharsAlertWithCount" format="string" />
-        <attr name="maxCharsAlert" format="string" />
-        <attr name="maxCharsLimited" format="boolean" />
-        <!-- <attr name="maxCharsAlertTime" format="enum">
-             <enum name="longTime" value="1"/>
-             <enum name="shortTime" value="0"/>
-         </attr>-->
+        <attr name="maxCharacters" format="integer"/>
+        <attr name="showMaxCharsAlertToast" format="boolean"/>
+        <attr name="maxCharsAlertWithCount" format="string"/>
+        <attr name="maxCharsAlert" format="string"/>
+        <attr name="maxCharsLimited" format="boolean"/>
+        <attr name="maxCharsAlertDuration">
+            <enum name="longTime" value="1"/>
+            <enum name="shortTime" value="0"/>
+        </attr>
     </declare-styleable>
 </resources>

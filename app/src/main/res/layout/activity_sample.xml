@@ -1,138 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:orientation="vertical"
-    tools:context=".SampleActivity">
-
-    <LinearLayout
+<android.support.v4.widget.NestedScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:fillViewport="true"
+        android:orientation="vertical"
+        tools:context=".SampleActivity">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="限定最长字符" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="限定最长字符"/>
 
         <com.lindroid.view.EasyEditText
-            android:id="@+id/etMax"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="最大输入字数为5"
-            app:maxCharacters="5" />
+                app:maxCharsAlertDuration="longTime"
+                android:id="@+id/etMax"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="最大输入字数为5"
+                app:maxCharacters="5"/>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="限定最长字符并弹出默认Toast" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="限定最长字符并弹出默认Toast"/>
 
         <com.lindroid.view.EasyEditText
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="最大输入字数为5"
-            app:maxCharacters="5"
-            app:showMaxCharsAlertToast="true" />
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="最大输入字数为5"
+                app:maxCharacters="5"
+                app:showMaxCharsAlertToast="true"/>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="达到最大输入数后不限制输入" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="达到最大输入数后不限制输入"/>
 
         <com.lindroid.view.EasyEditText
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="最大输入字数为5"
-            app:maxCharacters="5"
-            app:maxCharsLimited="false"
-            app:showMaxCharsAlertToast="true" />
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="最大输入字数为5"
+                app:maxCharacters="5"
+                app:maxCharsLimited="false"
+                app:showMaxCharsAlertToast="true"/>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="一键清空内容并监听是否为空" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="一键清空内容并监听是否为空"/>
 
         <com.lindroid.view.EasyEditText
-            android:id="@+id/etEmpty"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="@string/hint_input"
-            app:showClearButton="true" />
+                android:id="@+id/etEmpty"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="@string/hint_input"
+                app:showClearButton="true"/>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="监听输入的文本" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="监听输入的文本"/>
 
         <com.lindroid.view.EasyEditText
-            android:id="@+id/etWatcher"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="@string/hint_input"
-            app:showClearButton="true" />
+                android:id="@+id/etWatcher"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="@string/hint_input"
+                app:showClearButton="true"/>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="密码明暗文切换" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="密码明暗文切换"/>
 
         <com.lindroid.view.EasyEditText
-            android:id="@+id/etPwd"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="@string/hint_input"
-            android:inputType="textPassword"
-            app:showPlainCipherToggle="true" />
+                android:id="@+id/etPwd"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="@string/hint_input"
+                android:inputType="textPassword"
+                app:showPlainCipherToggle="true"/>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="自定义一键清空图标" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="自定义一键清空图标"/>
 
         <com.lindroid.view.EasyEditText
-            android:id="@+id/etCustomClear"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="@string/hint_input"
-            android:inputType="textPassword"
-            app:clearContentIcon="@drawable/ic_delete"
-            app:showClearButton="true" />
+                android:id="@+id/etCustomClear"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="@string/hint_input"
+                android:inputType="textPassword"
+                app:clearContentIcon="@drawable/ic_delete"
+                app:showClearButton="true"/>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="自定义明暗文图标" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="自定义明暗文图标"/>
 
         <com.lindroid.view.EasyEditText
-            android:id="@+id/etCustomPwd"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="@string/hint_input"
-            android:inputType="textPassword"
-            app:cipherTextIcon="@drawable/ic_close"
-            app:plainTextIcon="@drawable/ic_open"
-            app:showPlainCipherToggle="true" />
+                android:id="@+id/etCustomPwd"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="@string/hint_input"
+                android:inputType="textPassword"
+                app:cipherTextIcon="@drawable/ic_close"
+                app:plainTextIcon="@drawable/ic_open"
+                app:showPlainCipherToggle="true"/>
+
+        <com.lindroid.view.EasyEditText
+                android:id="@+id/editText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="@string/hint_input"
+                android:inputType="textPassword"
+                app:showClearButton="false"
+                app:clearContentIcon="@drawable/ic_eet_clear"
+                app:showPlainCipherToggle="true"
+                app:cipherTextIcon="@drawable/ic_eet_content_cipher"
+                app:plainTextIcon="@drawable/ic_eet_content_plain"
+                app:maxCharacters="140"
+                app:showMaxCharsAlertToast="true"
+                app:maxCharsAlertWithCount="最大输入字数为d%"
+                app:maxCharsAlert="你已超过最大限制字数"
+                app:maxCharsLimited="true"/>
     </LinearLayout>
 
-    <com.lindroid.view.EasyEditText
-        android:id="@+id/editText"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:hint="@string/hint_input"
-        android:inputType="textPassword"
-        app:showClearButton="false"
-        app:clearContentIcon="@drawable/ic_eet_clear"
-        app:showPlainCipherToggle="true"
-        app:cipherTextIcon="@drawable/ic_eet_content_cipher"
-        app:plainTextIcon="@drawable/ic_eet_content_plain"
-        app:maxCharacters="140"
-        app:showMaxCharsAlertToast="true"
-        app:maxCharsAlertWithCount="最大输入字数为d%"
-        app:maxCharsAlert="你已超过最大限制字数"
-        app:maxCharsLimited="true" />
 
 
 </android.support.v4.widget.NestedScrollView>

@@ -1,3 +1,4 @@
 <resources>
+    <!--注意：覆盖此字符资源时，字符中必须有%d，用于替换最大输入字符数-->
     <string name="eet_max_chars_alert_with_count">请勿超过%d字</string>
 </resources>

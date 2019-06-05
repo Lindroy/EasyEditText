@@ -1,16 +1,17 @@
 # EasyEditText
 
+
 [![](https://jitpack.io/v/Lindroy/EasyEditText.svg)](https://jitpack.io/#Lindroy/EasyEditText)
 
-使用Kotlin编写的多功能EditText。
+多功能EditText。
 
 ## 目录
 * [功能介绍](#功能介绍)
 * [使用方法](#使用方法)
 * [自定义布局属性](#自定义布局属性)
 * [方法说明](#方法说明)
-
-自定义布局属性
+* [自定义布局属性](#自定义布局属性)
+* [资源文件](#资源文件)
 
 ## 功能介绍
 - [x] 一键清空内容，可自定义清除图标
@@ -20,25 +21,26 @@
 - [x] 可设置达到最大字符数的监听事件
 - [x] 达到最大字符数时，并可弹出默认或自定义的Toast
 - [x] 可自定义达到最大字符数时是否限制输入
-- [x] 输入内容监听事件
+- [x] 输入内容监听事
+- [ ] 增加设置默认Toast的时长（Long或Short）的方法
 
 ## 使用方法
 
 在工程的build.gradle中添加：
 ```
-	allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
-	}
+    allprojects {
+        repositories {
+            ...
+            maven { url 'https://jitpack.io' }
+        }
+    }
 ```
 
 添加依赖库：
 ```
-	dependencies {
-	        implementation 'com.github.Lindroy:EasyEditText:latest-version'
-	}
+    dependencies {
+            implementation 'com.github.Lindroy:EasyEditText:latest-version'
+    }
 ```
 **latest-version**请参考标题下方的JitPack小图标。
 
@@ -161,4 +163,23 @@
 
             }
         });
+```
+## 资源文件
+`EasyEditText`用到了一些图片和文字资源，如有需要，你可以覆盖它们，替换成你自己的图片或文字。
+
+### 图片资源
+图片资源放在依赖库的drawable-xxhdpi文件夹下：
+- 一键清空图片：ic_eet_clear.png
+- 密文图标：ic_eet_content_cipher.png
+- 明文图标：ic_eet_content_plain.png
+
+### 字符资源
+字符文件放在string.xml中：
+
+```xml
+<resources>
+    <!--注意：覆盖此字符资源时，字符中必须有%d，用于替换最大输入字符数-->
+    <string name="eet_max_chars_alert_with_count">请勿超过%d字</string>
+</resources>
+
 ```
