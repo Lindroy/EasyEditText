@@ -191,13 +191,13 @@ public class EasyEditText extends AppCompatEditText {
                 if (emptyListener != null) {
                     if (TextUtils.isEmpty(content)) {
                         isEmpty = true;
+                        emptyListener.onEmpty(isEmpty);
                     } else {
-                        if (!isEmpty) {
-                            return;
+                        if (isEmpty) {
+                            isEmpty = false;
+                            emptyListener.onEmpty(isEmpty);
                         }
-                        isEmpty = false;
                     }
-                    emptyListener.onEmpty(isEmpty);
                 }
 
                 //监听最大输入字符
