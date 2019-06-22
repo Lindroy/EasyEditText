@@ -1,4 +1,4 @@
-package com.lindroid.view;
+package com.lindroid.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -15,10 +15,10 @@ import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
+import com.lindroid.view.R;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -127,7 +127,6 @@ public class EasyEditText extends AppCompatEditText {
         maxCharsAlertWithCount = checkNull(ta.getString(R.styleable.EasyEditText_maxCharsAlert));
         showMaxCharsAlertToast = ta.getBoolean(R.styleable.EasyEditText_showMaxCharsAlertToast, false);
         maxCharsAlertDuration = ta.getInt(R.styleable.EasyEditText_maxCharsAlertDuration, maxCharsAlertDuration);
-        Log.e("Tag", "maxCharsAlertDuration=" + maxCharsAlertDuration);
         ta.recycle();
         if (getText() != null) {
             isEmpty = getText().toString().isEmpty();
@@ -147,7 +146,7 @@ public class EasyEditText extends AppCompatEditText {
      */
     private void checkInputType() {
         switch (getInputType()) {
-            case EditorInfo.TYPE_CLASS_TEXT | EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD: //可见的密码
+            case EditorInfo.TYPE_CLASS_TEXT | EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD://可见的密码
                 isPwdType = true;
                 isDisplayContent = true;
                 break;
@@ -520,6 +519,7 @@ public class EasyEditText extends AppCompatEditText {
      */
     public interface BeforeTextChangeListener {
         /**
+         * 文本变化前触发
          * @param s:改变前的字符
          * @param start:即将修改的位置
          * @param count:即将被修改的文字长度，新增则为0
@@ -541,6 +541,7 @@ public class EasyEditText extends AppCompatEditText {
      */
     public interface OnTextChangeListener {
         /**
+         * 文本内容改变时触发
          * @param s:文本内容
          * @param start:有变动的字符序号
          * @param before:变动的字符长度，新增的话则为0
@@ -561,6 +562,11 @@ public class EasyEditText extends AppCompatEditText {
      * 文本改变后的监听接口
      */
     public interface AfterTextChangeListener {
+        /**
+         * 文本内容变化后触发
+         *
+         * @param s
+         */
         void onAfter(Editable s);
     }
 
@@ -576,6 +582,7 @@ public class EasyEditText extends AppCompatEditText {
      */
     public interface OnMaxCharactersListener {
         /**
+         * 达到最大输入字数时触发
          * @param maxChars:最大输入字符数
          * @param alertText:超过最大输入字符数时的提示文字
          */
@@ -594,6 +601,7 @@ public class EasyEditText extends AppCompatEditText {
      */
     public interface OnEmptyChangeListener {
         /**
+         * 内容为空时触发
          * @param isEmpty: 输入框是否为空
          */
         void onEmpty(boolean isEmpty);
@@ -612,6 +620,7 @@ public class EasyEditText extends AppCompatEditText {
      */
     public interface OnContentChangeListener {
         /**
+         * 文本内容变化时触发
          * @param content:文本内容
          * @param count:当前的文本长度
          */
