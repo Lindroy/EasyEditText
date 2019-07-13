@@ -15,7 +15,6 @@ import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
@@ -28,7 +27,6 @@ import org.jetbrains.annotations.NotNull;
  * @Description
  */
 public class EasyEditText extends AppCompatEditText {
-    private String TAG = "EasyTag";
     /**
      * 一键清空按钮图片Id
      */
@@ -87,6 +85,9 @@ public class EasyEditText extends AppCompatEditText {
      */
     private int maxCharsAlertDuration = Toast.LENGTH_SHORT;
 
+    @NonNull
+    private String maxCharsAlertFinal = "";
+
     private boolean isEmpty = false;
 
     private TextWatcher textWatcher = null;
@@ -127,7 +128,6 @@ public class EasyEditText extends AppCompatEditText {
         maxCharsAlertWithCount = checkNull(ta.getString(R.styleable.EasyEditText_maxCharsAlert));
         showMaxCharsAlertToast = ta.getBoolean(R.styleable.EasyEditText_showMaxCharsAlertToast, false);
         maxCharsAlertDuration = ta.getInt(R.styleable.EasyEditText_maxCharsAlertDuration, maxCharsAlertDuration);
-        Log.e("Tag", "maxCharsAlertDuration=" + maxCharsAlertDuration);
         ta.recycle();
         if (getText() != null) {
             isEmpty = getText().toString().isEmpty();
@@ -209,19 +209,18 @@ public class EasyEditText extends AppCompatEditText {
                         assert getText() != null;
                         setSelection(getText().length());
                     }
-                    String alertText;
                     if (!maxCharsAlertWithCount.isEmpty()) {
-                        alertText = String.format(maxCharsAlertWithCount, maxCharacters);
+                        maxCharsAlertFinal = String.format(maxCharsAlertWithCount, maxCharacters);
                     } else if (!maxCharsAlert.isEmpty()) {
-                        alertText = maxCharsAlert;
+                        maxCharsAlertFinal = maxCharsAlert;
                     } else {
-                        alertText = String.format(getContext().getString(R.string.eet_max_chars_alert_with_count), maxCharacters);
+                        maxCharsAlertFinal = String.format(getContext().getString(R.string.eet_max_chars_alert_with_count), maxCharacters);
                     }
                     if (showMaxCharsAlertToast) {
-                        Toast.makeText(getContext(), alertText, maxCharsAlertDuration).show();
+                        Toast.makeText(getContext(), maxCharsAlertFinal, maxCharsAlertDuration).show();
                     }
                     if (maxListener != null) {
-                        maxListener.onMaxChars(maxCharacters, alertText);
+                        maxListener.onMaxChars(maxCharacters, maxCharsAlertFinal);
                     }
                 }
             }
@@ -514,6 +513,14 @@ public class EasyEditText extends AppCompatEditText {
         return isMaxCharsLimited;
     }
 
+    /**
+     * 达到最大输入字数后弹出的Toast文字
+     */
+    @NonNull
+    public String getMaxCharsAlertFinal(){
+        return maxCharsAlertFinal;
+    }
+
 
     /**
      * 文本改变前的监听接口
@@ -618,6 +625,10 @@ public class EasyEditText extends AppCompatEditText {
         void onChanged(@NonNull CharSequence content, int count);
     }
 
+    /**
+     * 文本内容变化监听
+     * @param listener
+     */
     public void setOnContentChangeListener(OnContentChangeListener listener) {
         contentListener = listener;
         setTextWatcher();
@@ -625,12 +636,12 @@ public class EasyEditText extends AppCompatEditText {
 
     @Override
     protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
         changeListener = null;
         beforeListener = null;
         afterListener = null;
         contentListener = null;
         maxListener = null;
         emptyListener = null;
+        super.onDetachedFromWindow();
     }
 }

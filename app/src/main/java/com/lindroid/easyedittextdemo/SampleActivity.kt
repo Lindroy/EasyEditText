@@ -29,5 +29,6 @@ class SampleActivity : AppCompatActivity() {
 
 //        etCustomPwd.hideIcon = R.drawable.ic_close
 //        etCustomPwd.displayIcon = R.drawable.ic_open
+
     }
 }
