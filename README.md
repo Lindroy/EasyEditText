@@ -46,7 +46,7 @@
 
 在xml布局中添加：
 ```xml
-    <com.lindroid.view.EasyEditText
+    <com.lindroid.widget.EasyEditText
         android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="50dp"

@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
-import com.lindroid.view.EasyEditText;
+import com.lindroid.widget.EasyEditText;
 
 public class JavaActivity extends AppCompatActivity {
 

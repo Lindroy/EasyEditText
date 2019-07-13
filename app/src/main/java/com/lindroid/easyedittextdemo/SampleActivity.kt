@@ -16,6 +16,7 @@ class SampleActivity : AppCompatActivity() {
         etMax.setMaxCharsListener { maxChars, alertText ->
             Toast.makeText(this, "最大字数为$maxChars", Toast.LENGTH_SHORT).show()
         }
+        etMax.setEmptyChangeListener { }
         etEmpty.setEmptyChangeListener { isEmpty ->
             if (isEmpty) {
                 Toast.makeText(this, "内容已清空", Toast.LENGTH_SHORT).show()
